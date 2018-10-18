@@ -1,0 +1,1 @@
+drop table organizers, checks, check_ticketsid, coupons, secure, tickets cascade;
