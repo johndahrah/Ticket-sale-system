@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS Tickets (
 );
 
 CREATE TABLE IF NOT EXISTS Secure (
-  ID           INTEGER NOT NULL, 
-  Iogin       varchar(255), 
+  ID          SERIAL NOT NULL,
+  Login       varchar(255),
   Password    varchar(255), 
   AccessLevel INT NOT NULL,
   PRIMARY KEY (ID)
