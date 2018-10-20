@@ -18,18 +18,49 @@ db = create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POS
 
 
 @app.route('/api/user/add', methods=['POST'])
-def add_user():
+def user_add():
+    """
+    sequence diagram # todo
+    """
     content = dict(request.get_json())
-
-    username = content.get(json_keys.username)
-    password = content.get(json_keys.password)
-    level = content.get(json_keys.level)
+    username, password, level = get_user_data(content)
 
     db.execute("INSERT INTO Users "
                "(login, password, accessLevel) "
                "VALUES (\'%s\', \'%s\', %s);"
                % (username, password, level))
     return 'ok'
+
+
+@app.route('/api/user/modify', methods=['POST'])
+def user_modify():
+    """
+    sequence diagram # todo
+    # todo check if the user is in the database
+    """
+    content = dict(request.get_json())
+    username, password, level = get_user_data(content)
+    data_to_change = content.get(json_keys.change_data_type)
+    if data_to_change == json_keys.level:
+        db.execute('UPDATE users SET accesslevel = %s WHERE login LIKE \'%s\'' % (level, username))
+        return 'ok'
+    if data_to_change == json_keys.password:
+        db.execute('UPDATE users SET password = %s WHERE login LIKE \'%s\'' % (password, username))
+        return 'ok'
+    if data_to_change == json_keys.username:
+        # todo
+        pass
+    return 'nothing has been changed: ' + data_to_change + ' is not a valid json value'
+
+
+@app.route('/api/ticket/add', methods=['POST'])
+def ticket_add_new():
+    """
+    sequence diagram # 2
+    """
+    content = dict(request.get_json())
+
+    pass
 
 
 @app.route('/api/system/db/init_tables')
@@ -56,6 +87,13 @@ def example():
     return jsonify(content)
 
 
+def get_user_data(content):
+    username = content.get(json_keys.username)
+    password = content.get(json_keys.password)
+    level = content.get(json_keys.level)
+    return username, password, level
+
+
 def read_file(filename):
     file = open(filename, 'r')
     content = file.read()
@@ -76,6 +114,7 @@ def execute_sql_commands(content):
     return 'ok'
 
 
+drop_all_tables()
 initialize_all_tables()
 generate_test_db_data.generate(db, clear_existing=true)
 
