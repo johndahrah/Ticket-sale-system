@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Organizers (
-  ID       SERIAL NOT NULL,
+  ID       INTEGER NOT NULL,
   Name     varchar(255) NOT NULL,
   Address  varchar(255) NOT NULL,
   PRIMARY KEY (ID)
@@ -40,14 +40,11 @@ CREATE TABLE IF NOT EXISTS Tickets (
   EventTime             varchar(255),
   EventPlace            varchar(255),
   EventOrganizerName    varchar(255),
-  EventOrganizerAddress varchar(255),
   SellPrice             FLOAT NOT NULL,
   Comment               varchar(255),
-  EventOrganizerID      INT NOT NULL,
-  ticketID              INT NOT NULL,
+  OrganizerID      INT NOT NULL,
   PRIMARY KEY (ID),
-  FOREIGN KEY(EventOrganizerID) REFERENCES Organizers(ID),
-  FOREIGN KEY(ticketID) REFERENCES Checks(ID)
+  FOREIGN KEY(OrganizerID) REFERENCES Organizers(ID)
 );
 
 CREATE TABLE IF NOT EXISTS Check_ticketsID (

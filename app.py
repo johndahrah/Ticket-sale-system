@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from sqlalchemy import *
 import re
 import json_keys
+import generate_test_db_data
 
 app = Flask(__name__)
 
@@ -74,6 +75,9 @@ def execute_sql_commands(content):
             db.execute(i)
     return 'ok'
 
+
+initialize_all_tables()
+generate_test_db_data.generate(db, clear_existing=true)
 
 if __name__ == '__main__':
     app.run()
