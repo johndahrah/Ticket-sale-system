@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import *
 import re
-import json_keys
+import json_text_constants
 import generate_test_db_data
 
 app = Flask(__name__)
@@ -14,7 +14,9 @@ POSTGRES = {
     'port': '5432',
 }
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = create_engine('postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES)
+db = create_engine(
+    'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+    )
 
 
 @app.route('/api/user/add', methods=['POST'])
@@ -25,42 +27,96 @@ def user_add():
     content = dict(request.get_json())
     username, password, level = get_user_data(content)
 
-    db.execute("INSERT INTO Users "
-               "(login, password, accessLevel) "
-               "VALUES (\'%s\', \'%s\', %s);"
-               % (username, password, level))
+    db.execute(
+        "INSERT INTO Users "
+        "(login, password, accessLevel) "
+        "VALUES (\'%s\', \'%s\', %s);"
+        % (username, password, level)
+        )
     return 'ok'
 
 
-@app.route('/api/user/modify', methods=['POST'])
+@app.route('/api/user/modify', methods=['GET', 'POST'])
 def user_modify():
     """
     sequence diagram # todo
     # todo check if the user is in the database
     """
-    content = dict(request.get_json())
-    username, password, level = get_user_data(content)
-    data_to_change = content.get(json_keys.change_data_type)
-    if data_to_change == json_keys.level:
-        db.execute('UPDATE users SET accesslevel = %s WHERE login LIKE \'%s\'' % (level, username))
+
+    # sample GET request handler
+    # e.g. /modify?user_name=u1&password=123&privilege_level=1&change=password
+    if request.method == 'GET':
+        username = request.args.get(json_text_constants.username)
+        password = request.args.get(json_text_constants.password)
+        level = request.args.get(json_text_constants.level)
+        data_to_change = request.args.get(json_text_constants.change_data_type)
+
+    else:
+        content = dict(request.get_json())
+        username, password, level = get_user_data(content)
+        data_to_change = content.get(json_text_constants.change_data_type)
+
+    if data_to_change == json_text_constants.level:
+        db.execute(
+            f'UPDATE users SET accesslevel = {level} '
+            f'WHERE login LIKE \'{username}\''
+            )
         return 'ok'
-    if data_to_change == json_keys.password:
-        db.execute('UPDATE users SET password = %s WHERE login LIKE \'%s\'' % (password, username))
+    if data_to_change == json_text_constants.password:
+        db.execute(
+            f'UPDATE users SET password = {password} '
+            f'WHERE login LIKE \'{username}\''
+            )
         return 'ok'
-    if data_to_change == json_keys.username:
-        # todo
+    if data_to_change == json_text_constants.username:
+        # todo username change
         pass
-    return 'nothing has been changed: ' + data_to_change + ' is not a valid json value'
+    return json_text_constants.json_change_value_error % data_to_change
+
+
+@app.route('/api/ticket/view/all', methods=['GET'])
+def ticket_view_all():
+    """
+    sequence diagram # 8
+    """
+    result = db.execute(
+        'SELECT * FROM tickets'
+        )
+    return jsonify({'result': [dict(row) for row in result]})
+
+
+@app.route('/api/ticket/view', methods=['GET'])
+def ticket_view_specific():
+    """
+    sequence diagram #8 (inherited)
+    """
+    if len(request.args) == 0:
+        return ticket_view_all()
+
+    sql_statement = 'SELECT * FROM tickets WHERE '
+    multiple_parameters = False
+    for i in json_text_constants.all_properties:
+        argument = request.args.get(i)
+        if argument is not None:
+            equal_operator = '=' if argument.isdigit() else 'LIKE'
+            if multiple_parameters:
+                sql_statement += ' AND '
+            sql_statement += f'{i} {equal_operator} {argument}'
+            multiple_parameters = True
+    result = db.execute(sql_statement)
+    return jsonify({'result': [dict(row) for row in result]})
 
 
 @app.route('/api/ticket/add', methods=['POST'])
-def ticket_add_new():
+def ticket_add():
     """
     sequence diagram # 2
+    todo: ticket should have some kind of a 'unique number' that's printed out
+          on a physical ticket (like 21EE1231221)
     """
     content = dict(request.get_json())
 
-    pass
+    return 'not implemented yet'
 
 
 @app.route('/api/system/db/init_tables')
@@ -88,9 +144,9 @@ def example():
 
 
 def get_user_data(content):
-    username = content.get(json_keys.username)
-    password = content.get(json_keys.password)
-    level = content.get(json_keys.level)
+    username = content.get(json_text_constants.username)
+    password = content.get(json_text_constants.password)
+    level = content.get(json_text_constants.level)
     return username, password, level
 
 

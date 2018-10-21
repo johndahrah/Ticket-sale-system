@@ -26,7 +26,7 @@ tickets_data = [
      '6': 1500,
      '7': 'Enter before 17:30',
      '8': '2',
-     'amount': 50  # the amount of the tickets for this performance
+     'amount': 50
      }
 ]
 
@@ -61,6 +61,7 @@ def generate(db, clear_existing=False):
         for j in range(i.get('amount')):
             db.execute(
                 "INSERT INTO tickets "
-                "(OpenedForSelling, EventDate, EventTime, EventPlace, EventOrganizerName, SellPrice, Comment, OrganizerID)"
+                "(OpenedForSelling, EventDate, EventTime, EventPlace, "
+                "EventOrganizerName, SellPrice, Comment, OrganizerID)"
                 "VALUES (%(1)r, \'%(2)s\', \'%(3)s\', \'%(4)s\', \'%(5)s\', %(6)s, \'%(7)s\', \'%(8)s\');" % i
             )

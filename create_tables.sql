@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS Tickets (
   EventTime             varchar(255),
   EventPlace            varchar(255),
   EventOrganizerName    varchar(255),
-  SellPrice             FLOAT NOT NULL,
+  SellPrice             INT NOT NULL,
   Comment               varchar(255),
   OrganizerID      INT NOT NULL,
   PRIMARY KEY (ID),
