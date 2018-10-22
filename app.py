@@ -43,18 +43,9 @@ def user_modify():
     # todo check if the user is in the database
     """
 
-    # sample GET request handler
-    # e.g. /modify?user_name=u1&password=123&privilege_level=1&change=password
-    if request.method == 'GET':
-        username = request.args.get(json_text_constants.username)
-        password = request.args.get(json_text_constants.password)
-        level = request.args.get(json_text_constants.level)
-        data_to_change = request.args.get(json_text_constants.change_data_type)
-
-    else:
-        content = dict(request.get_json())
-        username, password, level = get_user_data(content)
-        data_to_change = content.get(json_text_constants.change_data_type)
+    content = dict(request.get_json())
+    username, password, level = get_user_data(content)
+    data_to_change = content.get(json_text_constants.change_data_type)
 
     if data_to_change == json_text_constants.level:
         db.execute(
@@ -95,16 +86,21 @@ def ticket_view_specific():
 
     sql_statement = 'SELECT * FROM tickets WHERE '
     multiple_parameters = False
-    for i in json_text_constants.all_properties:
-        argument = request.args.get(i)
+    at_least_one_argument = False
+    for json_key in json_text_constants.all_properties:
+        argument = request.args.get(json_key)
         if argument is not None:
+            at_least_one_argument = True
             equal_operator = '=' if argument.isdigit() else 'LIKE'
             if multiple_parameters:
                 sql_statement += ' AND '
-            sql_statement += f'{i} {equal_operator} {argument}'
+            sql_statement += f'{json_key} {equal_operator} {argument}'
             multiple_parameters = True
-    result = db.execute(sql_statement)
-    return jsonify({'result': [dict(row) for row in result]})
+    if at_least_one_argument:
+        result = db.execute(sql_statement)
+        return jsonify({'result': [dict(row) for row in result]})
+    else:
+        return 'incorrect json arguments'
 
 
 @app.route('/api/ticket/add', methods=['POST'])
