@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS Tickets (
   Comment               varchar(255),
   OrganizerID           INT NOT NULL,
   SerialNumber          varchar(255) NOT NULL,
+  isSold                BOOLEAN NOT NULL,
   PRIMARY KEY (ID),
   FOREIGN KEY(OrganizerID) REFERENCES Organizers(ID)
 );

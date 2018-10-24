@@ -15,6 +15,7 @@ tickets_data = [
      7: '',            # Comment
      8: '1',           # OrganizerID
      9: 'ABC000',      # SerialNumber
+     10: False,        # isSold
      'amount': 100       # the amount of the tickets for this performance
                          # (not stored in the database)
      },
@@ -28,6 +29,7 @@ tickets_data = [
      7: 'Enter before 17:30',
      8: '2',
      9: 'TIC',
+     10: False,
      'amount': 50
      }
 ]
@@ -61,21 +63,13 @@ def generate(db, clear_existing=False):
 
     for i in tickets_data:
         for j in range(i.get('amount')):
-            # db.execute(
-            #     "INSERT INTO tickets "
-            #     "(OpenedForSelling, EventDate, EventTime, EventPlace, "
-            #     "EventOrganizerName, SellPrice, Comment, "
-            #     "OrganizerID, SerialNumber)"
-            #     "VALUES (%(1)r, \'%(2)s\', \'%(3)s\', \'%(4)s\'"
-            #     ", \'%(5)s\', %(6)s, \'%(7)s\', \'%(8)s\', \'%s\');" % i, serial
-            # )
             sql_statement = f'INSERT INTO tickets ' \
-                            f'(OpenedForSelling, EventDate, EventTime, EventPlace, ' \
-                            f'EventOrganizerName, SellPrice, Comment, ' \
-                            f'OrganizerID, SerialNumber) ' \
+                            f'(OpenedForSelling, EventDate, EventTime, ' \
+                            f'EventPlace, EventOrganizerName, SellPrice, ' \
+                            f'Comment, OrganizerID, SerialNumber, isSold) ' \
                             f'VALUES (' \
                             f'{i[1]}, \'{i[2]}\', \'{i[3]}\', \'{i[4]}\', ' \
                             f'\'{i[5]}\', {i[6]}, \'{i[7]}\', \'{i[8]}\', ' \
-                            f'\'{i[9] + str(j)}\'' \
+                            f'\'{i[9] + str(j+1)}\', {i[10]}' \
                             f');'
             db.execute(sql_statement);

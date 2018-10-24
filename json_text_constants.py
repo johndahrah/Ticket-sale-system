@@ -12,10 +12,10 @@ place = 'eventplace'
 organizer = 'EventOrganizerName'
 price = 'sellprice'
 comment = 'comment'
-organizerID = 'organizerID'
+organizerid = 'organizerid'
 serial = 'serialnumber'
 all_properties = (
-    opened, date, time, place, organizer, price, comment, organizerID, serial
+    opened, date, time, place, organizer, price, comment, organizerid, serial
     )
 
 
