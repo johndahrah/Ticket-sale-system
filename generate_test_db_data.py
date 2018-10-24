@@ -6,26 +6,28 @@ users_data = [
 ]
 
 tickets_data = [
-    {'1': False,         # OpenedForSelling
-     '2': '18.08.2019',  # EventDate
-     '3': '19.00',       # EventTime
-     '4': 'Street 1',    # EventPlace
-     '5': 'Theatre',     # EventOrganizerName
-     '6': 1000,          # SellPrice
-     '7': '',            # Comment
-     '8': '1',           # OrganizerID
+    {1: False,         # OpenedForSelling
+     2: '18.08.2019',  # EventDate
+     3: '19.00',       # EventTime
+     4: 'Street 1',    # EventPlace
+     5: 'Theatre',     # EventOrganizerName
+     6: 1000,          # SellPrice
+     7: '',            # Comment
+     8: '1',           # OrganizerID
+     9: 'ABC000',      # SerialNumber
      'amount': 100       # the amount of the tickets for this performance
                          # (not stored in the database)
      },
 
-    {'1': True,
-     '2': '01.04.2020',
-     '3': '18.00',
-     '4': 'Street 2',
-     '5': 'Theatre 2',
-     '6': 1500,
-     '7': 'Enter before 17:30',
-     '8': '2',
+    {1: True,
+     2: '01.04.2020',
+     3: '18.00',
+     4: 'Street 2',
+     5: 'Theatre 2',
+     6: 1500,
+     7: 'Enter before 17:30',
+     8: '2',
+     9: 'TIC',
      'amount': 50
      }
 ]
@@ -59,9 +61,21 @@ def generate(db, clear_existing=False):
 
     for i in tickets_data:
         for j in range(i.get('amount')):
-            db.execute(
-                "INSERT INTO tickets "
-                "(OpenedForSelling, EventDate, EventTime, EventPlace, "
-                "EventOrganizerName, SellPrice, Comment, OrganizerID)"
-                "VALUES (%(1)r, \'%(2)s\', \'%(3)s\', \'%(4)s\', \'%(5)s\', %(6)s, \'%(7)s\', \'%(8)s\');" % i
-            )
+            # db.execute(
+            #     "INSERT INTO tickets "
+            #     "(OpenedForSelling, EventDate, EventTime, EventPlace, "
+            #     "EventOrganizerName, SellPrice, Comment, "
+            #     "OrganizerID, SerialNumber)"
+            #     "VALUES (%(1)r, \'%(2)s\', \'%(3)s\', \'%(4)s\'"
+            #     ", \'%(5)s\', %(6)s, \'%(7)s\', \'%(8)s\', \'%s\');" % i, serial
+            # )
+            sql_statement = f'INSERT INTO tickets ' \
+                            f'(OpenedForSelling, EventDate, EventTime, EventPlace, ' \
+                            f'EventOrganizerName, SellPrice, Comment, ' \
+                            f'OrganizerID, SerialNumber) ' \
+                            f'VALUES (' \
+                            f'{i[1]}, \'{i[2]}\', \'{i[3]}\', \'{i[4]}\', ' \
+                            f'\'{i[5]}\', {i[6]}, \'{i[7]}\', \'{i[8]}\', ' \
+                            f'\'{i[9] + str(j)}\'' \
+                            f');'
+            db.execute(sql_statement);

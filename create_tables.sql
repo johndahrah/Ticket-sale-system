@@ -42,7 +42,8 @@ CREATE TABLE IF NOT EXISTS Tickets (
   EventOrganizerName    varchar(255),
   SellPrice             INT NOT NULL,
   Comment               varchar(255),
-  OrganizerID      INT NOT NULL,
+  OrganizerID           INT NOT NULL,
+  SerialNumber          varchar(255) NOT NULL,
   PRIMARY KEY (ID),
   FOREIGN KEY(OrganizerID) REFERENCES Organizers(ID)
 );
