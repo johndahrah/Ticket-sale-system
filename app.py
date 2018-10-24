@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import *
+from sqlalchemy.exc import DataError
 import re
 import json_text_constants as j_const
 import generate_test_db_data
@@ -113,23 +114,38 @@ def ticket_add():
     """
     # todo use organizerID to fill place, orgName (i.e. multiple SQL query)
     i = dict(request.get_json())
-    sql_statement = f'INSERT INTO tickets ' \
-                    f'(OpenedForSelling, EventDate, EventTime, ' \
-                    f'EventPlace, EventOrganizerName, SellPrice, ' \
-                    f'Comment, OrganizerID, SerialNumber, isSold) ' \
-                    f'VALUES (' \
-                    f'{i[j_const.opened]}, ' \
-                    f'\'{i[j_const.date]}\', ' \
-                    f'\'{i[j_const.time]}\', ' \
-                    f'\'{i[j_const.place]}\', ' \
-                    f'\'{i[j_const.organizer]}\', ' \
-                    f'{i[j_const.price]}, ' \
-                    f'\'{i[j_const.comment]}\', ' \
-                    f'\'{i[j_const.organizerid]}\', ' \
-                    f'\'{i[j_const.serial]}\', {False}' \
-                    f');'
+    try:
+        sql_statement = f'INSERT INTO tickets ' \
+                        f'(OpenedForSelling, EventDate, EventTime, ' \
+                        f'EventPlace, EventOrganizerName, SellPrice, ' \
+                        f'Comment, OrganizerID, SerialNumber, isSold) ' \
+                        f'VALUES (' \
+                        f'{i[j_const.opened]}, ' \
+                        f'\'{i[j_const.date]}\', ' \
+                        f'\'{i[j_const.time]}\', ' \
+                        f'\'{i[j_const.place]}\', ' \
+                        f'\'{i[j_const.organizer]}\', ' \
+                        f'{i[j_const.price]}, ' \
+                        f'\'{i[j_const.comment]}\', ' \
+                        f'\'{i[j_const.organizerid]}\', ' \
+                        f'\'{i[j_const.serial]}\', {False}' \
+                        f');'
+    except KeyError as e:
+        return f'invalid json key has been received, check: {e}'
+    try:
+        db.execute(sql_statement)
+    except DataError as e:
+        return f'invalid type! Details: {e}'
+    return 'successful'
+
+
+@app.route('/api/ticket/sell/id/<ticket_id>')
+def ticket_sell(ticket_id):
+    sql_statement = f'UPDATE tickets ' \
+                    f'SET issold = {True} ' \
+                    f'WHERE id = {ticket_id}'
     db.execute(sql_statement)
-    return 'not implemented yet'
+    return 'ok'
 
 
 @app.route('/api/system/db/init_tables')
