@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from sqlalchemy import *
 from sqlalchemy.exc import DataError
+from sqlalchemy.engine import ResultProxy
 import re
 import json_text_constants as j_const
 import generate_test_db_data
@@ -111,6 +112,7 @@ def ticket_view_specific():
 def ticket_add():
     """
     sequence diagram # 2
+    from a common sense, we add tickets with an isSold=False property
     """
     # todo use organizerID to fill place, orgName (i.e. multiple SQL query)
     i = dict(request.get_json())
@@ -146,6 +148,36 @@ def ticket_sell(ticket_id):
                     f'WHERE id = {ticket_id}'
     db.execute(sql_statement)
     return 'ok'
+
+
+@app.route('/api/ticket/modify/<ticket_id>', methods=['GET', 'POST'])
+def ticket_modify(ticket_id):
+    if not ticket_id_exists(ticket_id):
+        return 'no ticket with such ID'
+
+    sql_statement = f'UPDATE tickets SET '
+
+    json_dict = dict(request.get_json())
+    more_than_one_argument = False # todo check and test and finish code
+    for i in j_const.all_properties:
+        argument = json_dict.get(i)
+        if argument is not None:
+            sql_statement += f'{i} = {argument}'
+
+    sql_statement += f'WHERE id = {ticket_id}'
+    db.execute(sql_statement)
+    return 'ok'
+
+
+
+
+
+def ticket_id_exists(ticket_id):
+    sql_check_id_statement = f'SELECT * FROM tickets ' \
+                             f'WHERE id = {ticket_id}'
+    result_of_check: ResultProxy = db.execute(sql_check_id_statement)
+    rows_number = result_of_check.rowcount
+    return rows_number != 0
 
 
 @app.route('/api/system/db/init_tables')
