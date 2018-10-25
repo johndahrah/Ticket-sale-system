@@ -8,18 +8,24 @@ import requests
 #         "change": "--"
 #     })
 
-res = requests.post(
-    'http://localhost:5000/api/ticket/add', json={
-        "openedforselling": False,
-        "eventdate": "999999999",
-        "eventtime": "123",
-        "eventplace": "--",
-        "EventOrganizerName": "",
-        "sellprice": 9999,
-        "comment": "",
-        "organizerid": "1",
-        "serialnumber": "AAAAAA"
+# res = requests.post(
+#     'http://localhost:5000/api/ticket/add', json={
+#         "openedforselling": False,
+#         "eventdate": "999999999",
+#         "eventtime": "123",
+#         "eventplace": "--",
+#         "EventOrganizerName": "",
+#         "sellprice": 9999,
+#         "comment": "",
+#         "organizerid": "1",
+#         "serialnumber": "AAAAAA"
+#
+#     })
 
+res = requests.post(
+    'http://localhost:5000/api/ticket/modify/1', json={
+        "sellprice": 99999999,
+        "eventtime": '999999'
     })
 
 

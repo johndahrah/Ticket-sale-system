@@ -23,9 +23,6 @@ db = create_engine(
 
 @app.route('/api/user/add', methods=['POST'])
 def user_add():
-    """
-    sequence diagram # todo
-    """
     content = dict(request.get_json())
     username, password, level = get_user_data(content)
 
@@ -40,11 +37,7 @@ def user_add():
 
 @app.route('/api/user/modify', methods=['GET', 'POST'])
 def user_modify():
-    """
-    sequence diagram # todo
     # todo check if the user is in the database
-    """
-
     content = dict(request.get_json())
     username, password, level = get_user_data(content)
     data_to_change = content.get(j_const.change_data_type)
@@ -69,9 +62,6 @@ def user_modify():
 
 @app.route('/api/ticket/view/all', methods=['GET'])
 def ticket_view_all():
-    """
-    sequence diagram # 8
-    """
     result = db.execute(
         'SELECT * FROM tickets'
         )
@@ -80,14 +70,8 @@ def ticket_view_all():
 
 @app.route('/api/ticket/view', methods=['GET'])
 def ticket_view_specific():
-    """
-    sequence diagram #8 (inherited)
-    """
     if len(request.args) == 0:
         return ticket_view_all()
-
-    # probably a good idea to iterate request.args.keys()
-    # instead of j_const.all_properties
 
     sql_statement = 'SELECT * FROM tickets WHERE '
     multiple_parameters = False
@@ -110,11 +94,6 @@ def ticket_view_specific():
 
 @app.route('/api/ticket/add', methods=['GET', 'POST'])
 def ticket_add():
-    """
-    sequence diagram # 2
-    from a common sense, we add tickets with an isSold=False property
-    """
-    # todo use organizerID to fill place, orgName (i.e. multiple SQL query)
     i = dict(request.get_json())
     try:
         sql_statement = f'INSERT INTO tickets ' \
@@ -158,18 +137,20 @@ def ticket_modify(ticket_id):
     sql_statement = f'UPDATE tickets SET '
 
     json_dict = dict(request.get_json())
-    more_than_one_argument = False # todo check and test and finish code
+    if json_dict.get('id') is not None:
+        return 'you can not modify ticket\'s ID'
+
+    more_than_one_argument = False
     for i in j_const.all_properties:
         argument = json_dict.get(i)
         if argument is not None:
+            if more_than_one_argument:
+                sql_statement += ' , '
             sql_statement += f'{i} = {argument}'
-
+            more_than_one_argument = True
     sql_statement += f'WHERE id = {ticket_id}'
     db.execute(sql_statement)
     return 'ok'
-
-
-
 
 
 def ticket_id_exists(ticket_id):
