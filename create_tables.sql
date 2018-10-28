@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS Organizers (
 CREATE TABLE IF NOT EXISTS Coupons (
   ID            SERIAL NOT NULL,
   DateUsed      varchar(255) NOT NULL,
-  UsedInCheckID INT NOT NULL,
+  UsedInCheckID INT,
   CouponData    varchar(255) NOT NULL,
   PRIMARY KEY (ID)
 );

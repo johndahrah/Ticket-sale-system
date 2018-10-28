@@ -18,5 +18,8 @@ all_properties = (
     opened, date, time, place, organizer, price, comment, organizerid, serial
     )
 
+coupon = 'coupon'
+sell_tickets_id = 'selling'
+
 
 json_change_value_error = 'nothing has been changed: %s is not a valid json value'

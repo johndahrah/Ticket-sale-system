@@ -3,6 +3,7 @@ from sqlalchemy import *
 from sqlalchemy.exc import DataError
 from sqlalchemy.engine import ResultProxy
 import re
+import datetime
 import json_text_constants as j_const
 import generate_test_db_data
 
@@ -92,6 +93,14 @@ def ticket_view_specific():
         return 'no one correct json key found'
 
 
+@app.route('/api/ticket/view/<ticket_id>')
+def ticket_view_by_id(ticket_id):
+    sql_statement = f'SELECT * FROM tickets ' \
+                    f'WHERE id = {ticket_id}'
+    result = db.execute(sql_statement);
+    return jsonify({'result': [dict(row) for row in result]})
+
+
 @app.route('/api/ticket/add', methods=['GET', 'POST'])
 def ticket_add():
     i = dict(request.get_json())
@@ -120,11 +129,41 @@ def ticket_add():
     return 'successful'
 
 
-@app.route('/api/ticket/sell/id/<ticket_id>')
-def ticket_sell(ticket_id):
+@app.route('/api/ticket/sell', methods=['POST'])
+def ticket_sell():
+    now = datetime.datetime.now()
+    date = str(now.date())
+    json = dict(request.json)
+    coupon_data = json.get(j_const.coupon)
+    selling_tickets_id = json.get(j_const.sell_tickets_id)
+    if coupon_data is not None:
+        sql_statement = f'INSERT INTO coupons ' \
+                        f'(dateUsed, couponData) ' \
+                        f'VALUES (\'{date}\', \'{coupon_data}\')'
+        db.execute(sql_statement)
+
     sql_statement = f'UPDATE tickets ' \
                     f'SET issold = {True} ' \
-                    f'WHERE id = {ticket_id}'
+                    f'WHERE id IN {tuple(selling_tickets_id)}'
+    db.execute(sql_statement)
+
+    sql_statement = f'SELECT sum(sellprice) FROM tickets ' \
+                    f'WHERE id IN {tuple(selling_tickets_id)}'
+    sql_sum_result: ResultProxy = db.execute(sql_statement)
+    result = []
+    for row in sql_sum_result:
+        result.append(row)
+    total_price = result[0]._row[0]
+
+    worker_id = 1
+
+    coupon_id = 1
+
+    sql_statement = f'INSERT INTO checks ' \
+                    f'(TicketsAmount, TotalPrice, ' \
+                    f'CouponUsed, CouponID, WorkerID) ' \
+                    f'VALUES ({len(selling_tickets_id)}, {total_price}, ' \
+                    f'{coupon_data is not None}, {coupon_id}, {worker_id})'
     db.execute(sql_statement)
     return 'ok'
 
