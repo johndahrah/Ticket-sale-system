@@ -129,60 +129,77 @@ def ticket_add():
     return 'successful'
 
 
+def at_least_one_ticket_is_already_sold(tickets_id):
+    # todo: implement
+    return False
+
+
 @app.route('/api/ticket/sell', methods=['POST'])
 def ticket_sell():
     now = datetime.datetime.now()
     date = str(now.date())
     json = dict(request.json)
     coupon_data = json.get(j_const.coupon)
+
+    # separate the cases of (only one) and (many) tickets being sold:
+    #  in case of one ticket, we operate with it as an "int"
+    #  in case of many tickets, we operate with them as a "tuple"
     tickets_ids = json.get(j_const.sell_tickets_id)
     if type(tickets_ids) is int:
-        selling_tickets_id = tickets_ids
+        tickets_id = tickets_ids
     else:
-        selling_tickets_id = tuple(json.get(j_const.sell_tickets_id))
+        tickets_id = tuple(json.get(j_const.sell_tickets_id))
+
+    if at_least_one_ticket_is_already_sold(tickets_id):
+        return 'One or more chosen tickets are already sold'
+
+    # insert the possible coupon data into the database
     if coupon_data is not None:
         sql_statement = f'INSERT INTO coupons ' \
                         f'(dateUsed, couponData) ' \
                         f'VALUES (\'{date}\', \'{coupon_data}\')'
         db.execute(sql_statement)
 
+    # mark necessary tickets as "sold"
     equal_operator = '=' if type(tickets_ids) is int else 'IN'
     sql_statement = f'UPDATE tickets ' \
                     f'SET issold = {True} ' \
-                    f'WHERE id {equal_operator} {selling_tickets_id}'
-    print(sql_statement)
+                    f'WHERE id {equal_operator} {tickets_id}'
     db.execute(sql_statement)
 
     # receive the total price
     sql_statement = f'SELECT sum(sellprice) FROM tickets ' \
-                    f'WHERE id {equal_operator} {selling_tickets_id}'
+                    f'WHERE id {equal_operator} {tickets_id}'
     total_price = receive_sql_query_result(sql_statement)
 
     worker_id = json.get(j_const.userID)
 
-    # receive cou
+    # receive coupon data
     sql_statement = f'SELECT id FROM coupons ' \
                     f'WHERE coupondata LIKE \'{coupon_data}\''
     coupon_id = receive_sql_query_result(sql_statement)
 
+    # insert all data in "checks" table and receive the id of a new record
     sql_statement = f'INSERT INTO checks ' \
                     f'(TicketsAmount, TotalPrice, ' \
                     f'CouponUsed, CouponID, WorkerID) ' \
                     f'VALUES (' \
-                    f'{1 if type (tickets_ids) is int else len(selling_tickets_id)},' \
+                    f'{1 if type (tickets_ids) is int else len(tickets_id)},' \
                     f'{total_price}, {coupon_data is not None}, ' \
-                    f'{"null" if coupon_id is None else coupon_id}, {worker_id}) ' \
+                    f'{"null" if coupon_id is None else coupon_id}, ' \
+                    f'{worker_id}) ' \
                     f'RETURNING id'
     check_id = receive_sql_query_result(sql_statement)
 
+    # create a one-to-many relationship check<->ticket
     try:
-        for id in selling_tickets_id:
+        for ticket_id in tickets_id:
             sql_statement = f'INSERT INTO check_ticketsid VALUES ' \
-                            f'({check_id}, {id})'
+                            f'({check_id}, {ticket_id})'
             db.execute(sql_statement)
     except TypeError:  # 'int' object is not iterable
         sql_statement = f'INSERT INTO check_ticketsid VALUES ' \
-                        f'({check_id}, {selling_tickets_id})'
+                        f'({check_id}, {tickets_id})'
         db.execute(sql_statement)
     return 'ok'
 

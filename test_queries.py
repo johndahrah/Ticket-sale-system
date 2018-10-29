@@ -24,7 +24,7 @@ import requests
 
 res = requests.post(
     'http://localhost:5000/api/ticket/sell', json={
-        "selling": (1),
+        "selling": (1, 2),
         "coupon": "AABBCC123",
         "userid": 1
     })

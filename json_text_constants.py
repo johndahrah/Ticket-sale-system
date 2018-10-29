@@ -15,8 +15,10 @@ price = 'sellprice'
 comment = 'comment'
 organizerid = 'organizerid'
 serial = 'serialnumber'
+id = 'id'
 all_properties = (
-    opened, date, time, place, organizer, price, comment, organizerid, serial
+    id, opened, date, time, place,
+    organizer, price, comment, organizerid, serial
     )
 
 coupon = 'coupon'
