@@ -135,23 +135,29 @@ def ticket_sell():
     date = str(now.date())
     json = dict(request.json)
     coupon_data = json.get(j_const.coupon)
-    selling_tickets_id = json.get(j_const.sell_tickets_id)
+    tickets_ids = json.get(j_const.sell_tickets_id)
+    if type(tickets_ids) is int:
+        selling_tickets_id = tickets_ids
+    else:
+        selling_tickets_id = tuple(json.get(j_const.sell_tickets_id))
     if coupon_data is not None:
         sql_statement = f'INSERT INTO coupons ' \
                         f'(dateUsed, couponData) ' \
                         f'VALUES (\'{date}\', \'{coupon_data}\')'
         db.execute(sql_statement)
 
+    equal_operator = '=' if type(tickets_ids) is int else 'IN'
     sql_statement = f'UPDATE tickets ' \
                     f'SET issold = {True} ' \
-                    f'WHERE id IN {tuple(selling_tickets_id)}'
+                    f'WHERE id {equal_operator} {selling_tickets_id}'
+    print(sql_statement)
     db.execute(sql_statement)
 
     sql_statement = f'SELECT sum(sellprice) FROM tickets ' \
-                    f'WHERE id IN {tuple(selling_tickets_id)}'
+                    f'WHERE id {equal_operator} {selling_tickets_id}'
     total_price = receive_sql_query_result(sql_statement)
 
-    worker_id = 1  # todo evaluate as a sql query
+    worker_id = json.get(j_const.userID)
 
     sql_statement = f'SELECT id FROM coupons ' \
                     f'WHERE coupondata LIKE \'{coupon_data}\''
@@ -160,15 +166,23 @@ def ticket_sell():
     sql_statement = f'INSERT INTO checks ' \
                     f'(TicketsAmount, TotalPrice, ' \
                     f'CouponUsed, CouponID, WorkerID) ' \
-                    f'VALUES ({len(selling_tickets_id)}, {total_price}, ' \
-                    f'{coupon_data is not None}, {coupon_id}, {worker_id})'
+                    f'VALUES (' \
+                    f'{1 if type (tickets_ids) is int else len(selling_tickets_id)},' \
+                    f'{total_price}, {coupon_data is not None}, ' \
+                    f'{coupon_id}, {worker_id})'
     db.execute(sql_statement)
     return 'ok'
 
 
 def receive_sql_query_result(sql_statement):
+    """
+    works only for receiving a single variable.
+    actually needs to be rewritten
+    """
     sql_sum_result: ResultProxy = db.execute(sql_statement)
     result = []
+    if sql_sum_result.rowcount != 1:
+        print('--- CHECK receive_sql_query_result ---')
     for row in sql_sum_result:
         result.append(row)
     return result[0]._row[0]
