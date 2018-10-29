@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS Tickets (
 
 CREATE TABLE IF NOT EXISTS Check_ticketsID (
   CheckID    INT NOT NULL,
-  TicketID  INT NOT NULL,
-  PRIMARY KEY (CheckID),
+  TicketID   INT NOT NULL,
+  PRIMARY KEY (TicketID),
   FOREIGN KEY (TicketID) REFERENCES Tickets(ID)
 );

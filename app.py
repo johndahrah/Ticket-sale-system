@@ -153,12 +153,14 @@ def ticket_sell():
     print(sql_statement)
     db.execute(sql_statement)
 
+    # receive the total price
     sql_statement = f'SELECT sum(sellprice) FROM tickets ' \
                     f'WHERE id {equal_operator} {selling_tickets_id}'
     total_price = receive_sql_query_result(sql_statement)
 
     worker_id = json.get(j_const.userID)
 
+    # receive cou
     sql_statement = f'SELECT id FROM coupons ' \
                     f'WHERE coupondata LIKE \'{coupon_data}\''
     coupon_id = receive_sql_query_result(sql_statement)
@@ -169,8 +171,19 @@ def ticket_sell():
                     f'VALUES (' \
                     f'{1 if type (tickets_ids) is int else len(selling_tickets_id)},' \
                     f'{total_price}, {coupon_data is not None}, ' \
-                    f'{coupon_id}, {worker_id})'
-    db.execute(sql_statement)
+                    f'{"null" if coupon_id is None else coupon_id}, {worker_id}) ' \
+                    f'RETURNING id'
+    check_id = receive_sql_query_result(sql_statement)
+
+    try:
+        for id in selling_tickets_id:
+            sql_statement = f'INSERT INTO check_ticketsid VALUES ' \
+                            f'({check_id}, {id})'
+            db.execute(sql_statement)
+    except TypeError:  # 'int' object is not iterable
+        sql_statement = f'INSERT INTO check_ticketsid VALUES ' \
+                        f'({check_id}, {selling_tickets_id})'
+        db.execute(sql_statement)
     return 'ok'
 
 
@@ -185,7 +198,12 @@ def receive_sql_query_result(sql_statement):
         print('--- CHECK receive_sql_query_result ---')
     for row in sql_sum_result:
         result.append(row)
-    return result[0]._row[0]
+
+    try:
+        data = result[0]._row[0]
+    except IndexError:
+        return None
+    return data
 
 
 @app.route('/api/ticket/modify/<ticket_id>', methods=['GET', 'POST'])
