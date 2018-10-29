@@ -149,15 +149,13 @@ def ticket_sell():
 
     sql_statement = f'SELECT sum(sellprice) FROM tickets ' \
                     f'WHERE id IN {tuple(selling_tickets_id)}'
-    sql_sum_result: ResultProxy = db.execute(sql_statement)
-    result = []
-    for row in sql_sum_result:
-        result.append(row)
-    total_price = result[0]._row[0]
+    total_price = receive_sql_query_result(sql_statement)
 
-    worker_id = 1
+    worker_id = 1  # todo evaluate as a sql query
 
-    coupon_id = 1
+    sql_statement = f'SELECT id FROM coupons ' \
+                    f'WHERE coupondata LIKE \'{coupon_data}\''
+    coupon_id = receive_sql_query_result(sql_statement)
 
     sql_statement = f'INSERT INTO checks ' \
                     f'(TicketsAmount, TotalPrice, ' \
@@ -166,6 +164,14 @@ def ticket_sell():
                     f'{coupon_data is not None}, {coupon_id}, {worker_id})'
     db.execute(sql_statement)
     return 'ok'
+
+
+def receive_sql_query_result(sql_statement):
+    sql_sum_result: ResultProxy = db.execute(sql_statement)
+    result = []
+    for row in sql_sum_result:
+        result.append(row)
+    return result[0]._row[0]
 
 
 @app.route('/api/ticket/modify/<ticket_id>', methods=['GET', 'POST'])
