@@ -74,7 +74,9 @@ def ticket_view_specific():
     if len(request.args) == 0:
         return ticket_view_all()
 
-    sql_statement = 'SELECT * FROM tickets WHERE '
+    sql_statement = 'SELECT * FROM tickets'
+    # the following line is for preventing IDE from "unexpected eol" warning
+    sql_statement += ' WHERE '
     multiple_parameters = False
     at_least_one_argument = False
     for json_key in j_const.all_properties:
@@ -130,8 +132,24 @@ def ticket_add():
 
 
 def at_least_one_ticket_is_already_sold(tickets_id):
-    # todo: implement
+    # todo:2 implement
     return False
+
+
+def at_least_one_ticket_is_closed_for_sale(tickets_id):
+    try:
+        for i in tickets_id:
+            sql_statement = f'SELECT * FROM tickets ' \
+                            f'WHERE id = {i} AND openedforselling = true'
+            result = receive_sql_query_result(sql_statement)
+            if result is None:
+                return True
+        return False
+    except TypeError:  # 'int' object is not iterable
+        sql_statement = f'SELECT * FROM tickets ' \
+                        f'WHERE id = {tickets_id} AND openedforselling = true'
+        result = receive_sql_query_result(sql_statement)
+        return result is None
 
 
 @app.route('/api/ticket/sell', methods=['POST'])
@@ -152,6 +170,9 @@ def ticket_sell():
 
     if at_least_one_ticket_is_already_sold(tickets_id):
         return 'One or more chosen tickets are already sold'
+
+    if at_least_one_ticket_is_closed_for_sale(tickets_id):
+        return 'One or more chosen tickets are closed for sale'
 
     # insert the possible coupon data into the database
     if coupon_data is not None:

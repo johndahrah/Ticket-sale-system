@@ -6,7 +6,7 @@ users_data = [
 ]
 
 tickets_data = [
-    {1: False,         # OpenedForSelling
+    {1: True,         # OpenedForSelling
      2: '18.08.2019',  # EventDate
      3: '19.00',       # EventTime
      4: 'Street 1',    # EventPlace
