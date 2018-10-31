@@ -1,6 +1,6 @@
 import re
 
-from flask import Flask
+from flask import Flask, render_template
 from sqlalchemy import *
 
 import generate_test_db_data
@@ -24,6 +24,11 @@ from handlers.TicketsHandler import tickets_handler
 from handlers.UsersHandler import users_handler
 app.register_blueprint(tickets_handler)
 app.register_blueprint(users_handler)
+
+
+@app.route('/')
+def test():
+    return render_template('test.html')
 
 
 @app.route('/api/system/db/init_tables')
