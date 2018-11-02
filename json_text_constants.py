@@ -16,13 +16,22 @@ comment = 'comment'
 organizerid = 'organizerid'
 serial = 'serialnumber'
 id = 'id'
-all_properties = (
+all_ticket_properties = (
     id, opened, date, time, place,
     organizer, price, comment, organizerid, serial
     )
-
-coupon = 'coupon'
 sell_tickets_id = 'selling'
+
+# organizers
+organizer_name = 'name'
+organizer_address = 'address'
+organizer_id = 'id'
+all_organizer_properties = (
+    organizer_id, organizer_name, organizer_address
+)
+
+# coupons
+coupon = 'coupon'
 
 
 json_change_value_error = 'nothing has been changed: %s is not a valid json value'

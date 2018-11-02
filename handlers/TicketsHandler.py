@@ -30,7 +30,7 @@ def ticket_view_specific():
     sql_statement += ' WHERE '
     multiple_parameters = False
     at_least_one_argument = False
-    for json_key in j_const.all_properties:
+    for json_key in j_const.all_ticket_properties:
         argument = request.args.get(json_key)
         if argument is not None:
             at_least_one_argument = True
@@ -206,7 +206,7 @@ def ticket_modify(ticket_id):
         return 'you can not modify ticket\'s ID'
 
     more_than_one_argument = False
-    for i in j_const.all_properties:
+    for i in j_const.all_ticket_properties:
         argument = json_dict.get(i)
         if argument is not None:
             if more_than_one_argument:

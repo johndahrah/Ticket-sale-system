@@ -22,12 +22,22 @@ import requests
 #
 #     })
 
+# res = requests.post(
+#     'http://localhost:5000/api/ticket/sell', json={
+#         "selling": (1, 2),
+#         "coupon": "AABBCC123",
+#         "userid": 1
+#     })
+
 res = requests.post(
-    'http://localhost:5000/api/ticket/sell', json={
-        "selling": (1, 2),
-        "coupon": "AABBCC123",
-        "userid": 1
+    'http://localhost:5000/api/organizer/add', json={
+        "id": 99,
+        "name": "name 1",
+        "address": 'street A, 99'
     })
+
+res = requests.get(
+    'http://localhost:5000/api/organizer/view/all')
 
 
 print(res, res.content, sep='\n')
