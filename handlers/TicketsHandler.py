@@ -6,6 +6,7 @@ from sqlalchemy.exc import DataError
 
 import json_text_constants as j_const
 from app import db
+import sql_abstract_builder
 
 tickets_handler = Blueprint(
     'tickets_handler', __name__, url_prefix='/api/ticket'
@@ -25,21 +26,11 @@ def ticket_view_specific():
     if len(request.args) == 0:
         return ticket_view_all()
 
-    sql_statement = 'SELECT * FROM tickets'
-    # the following line is for preventing IDE from "unexpected eol" warning
-    sql_statement += ' WHERE '
-    multiple_parameters = False
-    at_least_one_argument = False
-    for json_key in j_const.all_ticket_properties:
-        argument = request.args.get(json_key)
-        if argument is not None:
-            at_least_one_argument = True
-            equal_operator = '=' if argument.isdigit() else 'LIKE'
-            if multiple_parameters:
-                sql_statement += ' AND '
-            sql_statement += f'{json_key} {equal_operator} {argument}'
-            multiple_parameters = True
-    if at_least_one_argument:
+    sql_statement = sql_abstract_builder.build_multiple_select(
+        'tickets', j_const.all_ticket_properties, request.args
+        )
+
+    if sql_statement is not None:
         result = db.execute(sql_statement)
         return jsonify({'result': [dict(row) for row in result]})
     else:

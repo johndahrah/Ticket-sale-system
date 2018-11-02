@@ -2,6 +2,7 @@ from flask import request, Blueprint, jsonify
 from sqlalchemy import engine
 
 import json_text_constants as j_const
+import sql_abstract_builder
 from app import db
 
 organizers_handler = Blueprint(
@@ -17,11 +18,19 @@ def organizers_view_all():
     return jsonify({'result': [dict(row) for row in result]})
 
 
-@organizers_handler.route('/view/<organizer_id>')
-def organizer_view_specific(organizer_id):
+@organizers_handler.route('/view', methods=['GET'])
+def organizer_view_specific():
     if len(request.args) == 0:
         return organizers_view_all()
-    pass
+    sql_statement = sql_abstract_builder.build_multiple_select(
+        'organizers', j_const.all_organizer_properties, request.args
+        )
+
+    if sql_statement is not None:
+        result = db.execute(sql_statement)
+        return jsonify({'result': [dict(row) for row in result]})
+    else:
+        return 'no one correct json key found'
 
 
 @organizers_handler.route('/add', methods=['POST'])
