@@ -5,5 +5,12 @@ Sample test page
 {% endblock %}
 
 {% block content %}
-Hello world!
+
+    {% for i in attributes %}
+        id: <b>{{ i.id }}</b> <br>
+        name: <b>{{ i.name }}</b> <br>
+        address: <b>{{ i.address }}</b> <br>
+        <br> <br>
+    {% endfor %}
+
 {% endblock %}

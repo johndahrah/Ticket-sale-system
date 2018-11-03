@@ -1,4 +1,4 @@
-from flask import request, Blueprint, jsonify
+from flask import request, Blueprint, jsonify, render_template
 from sqlalchemy import engine
 
 import json_text_constants as j_const
@@ -12,10 +12,11 @@ organizers_handler = Blueprint(
 
 @organizers_handler.route('/view/all')
 def organizers_view_all():
-    result = db.execute(
+    result_sys = db.execute(
         'SELECT * FROM organizers'
         )
-    return jsonify({'result': [dict(row) for row in result]})
+    result = [dict(row) for row in result_sys]
+    return render_template('test.html', attributes=result)
 
 
 @organizers_handler.route('/view', methods=['GET'])
