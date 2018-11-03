@@ -2,7 +2,7 @@ from flask import request, Blueprint, jsonify, render_template
 from sqlalchemy import engine
 
 import json_text_constants as j_const
-import sql_abstract_builder
+import sql_abstract_builder as sql_bld
 from app import db
 
 organizers_handler = Blueprint(
@@ -24,7 +24,7 @@ def organizer_view_specific():
     if len(request.args) == 0:
         return organizers_view_all()
 
-    sql_statement = sql_abstract_builder.build_select_with_multiple_conditions(
+    sql_statement = sql_bld.build_select_with_multiple_conditions(
         table='organizers',
         parameters=j_const.all_organizer_properties,
         arguments=request.args
@@ -42,10 +42,10 @@ def organizer_add():
     content = dict(request.get_json())
     organizer_id, name, address = get_organizer_data(content)
     if not_exists(organizer_id):
-        sql_statement = f'INSERT INTO organizers ' \
-                        f'VALUES (' \
-                        f'{organizer_id}, \'{name}\', \'{address}\'' \
-                        f')'
+        sql_statement = sql_bld.build_insert_of_single_entry(
+            table='organizers',
+            values=(organizer_id, str(name), str(address))
+            )
         db.execute(sql_statement)
         return 'ok'
     else:

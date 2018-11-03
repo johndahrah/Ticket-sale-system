@@ -43,14 +43,17 @@ def build_select_with_multiple_conditions(
 
 
 def build_insert_of_single_entry(
-        table: str, column_names: tuple, values: tuple):
-    sql_statement = f'INSERT INTO {table} ('
+        table: str, column_names: tuple=None, values: tuple=None):
+    sql_statement = f'INSERT INTO {table}'
 
-    for col_name in column_names:
-        sql_statement += f'{col_name}, '
-    sql_statement = sql_statement[:-2]  # remove the trailing comma
+    if column_names is not None:
+        sql_statement += '('
+        for col_name in column_names:
+            sql_statement += f'{col_name}, '
+        sql_statement = sql_statement[:-2]  # remove the trailing comma
+        sql_statement += ')'
 
-    sql_statement += ') VALUES ('
+    sql_statement += ' VALUES ('
 
     for i in range(0, len(values)):
         value = values[i]
