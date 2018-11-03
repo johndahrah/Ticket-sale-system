@@ -4,9 +4,15 @@ from werkzeug import datastructures
 def build_select_with_multiple_conditions(
         table: str, parameters: tuple, arguments: datastructures.MultiDict):
     """
-    :param table: Table to build query for.
-    :param parameters: aka table.colomns to iterate
-    :param arguments: aka table.rows
+    :param table:
+        table to build query for
+    :param parameters:
+        represents table.columns to iterate
+    :param arguments:
+        represents table.rows to compare with
+    :return
+        'str' object containing sql query,
+        or None in case of incorrect parameters
 
     the final query is basically as follows:
         SELECT * FROM <table>
@@ -36,29 +42,27 @@ def build_select_with_multiple_conditions(
         return None
 
 
-def build_insert(
-        table: str, colomn_names: tuple, values: tuple, values_types: tuple):
-    # todo implement, for reference see TicketHandler's lines 51-75
+def build_insert_of_single_entry(
+        table: str, column_names: tuple, values: tuple):
     sql_statement = f'INSERT INTO {table} ('
 
-    for col_name in colomn_names:
+    for col_name in column_names:
         sql_statement += f'{col_name}, '
-    sql_statement = sql_statement[:-1]
+    sql_statement = sql_statement[:-2]  # remove the trailing comma
 
     sql_statement += ') VALUES ('
 
-    assert len(values) == len(values_types)
     for i in range(0, len(values)):
         value = values[i]
-        value_type = values_types[i]
-        use_backslash = value_type == 'str'
+        value_type = type(value)
+        use_backslash = value_type is str
 
         if use_backslash:
             sql_statement += f'\'{value}\', '
         else:
             sql_statement += f'{value}, '
 
-    sql_statement = sql_statement[:-2]
+    sql_statement = sql_statement[:-2]  # remove the trailing comma
     sql_statement += ')'
 
     return sql_statement

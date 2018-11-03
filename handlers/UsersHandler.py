@@ -2,6 +2,7 @@ from flask import request, Blueprint
 
 import json_text_constants as j_const
 from app import db
+import sql_abstract_builder as sql_bld
 
 users_handler = Blueprint(
     'users_handler', __name__, url_prefix='/api/user'
@@ -13,12 +14,21 @@ def user_add():
     content = dict(request.get_json())
     username, password, level = get_user_data(content)
 
-    db.execute(
-        "INSERT INTO Users "
-        "(login, password, accessLevel) "
-        "VALUES (\'%s\', \'%s\', %s);"
-        % (username, password, level)
+    # db.execute(
+    #     "INSERT INTO Users "
+    #     "(login, password, accessLevel) "
+    #     "VALUES (\'%s\', \'%s\', %s);"
+    #     % (username, password, level)
+    #     )
+    sql_statement = sql_bld.build_insert_of_single_entry(
+        table='users',
+        column_names=('login', 'password', 'accessLevel'),
+
+        # explicitly set the types of username and password
+        # to 'str', as they are considered as 'Any' before.
+        values=(str(username), str(password), level),
         )
+    db.execute(sql_statement)
     return 'ok'
 
 
