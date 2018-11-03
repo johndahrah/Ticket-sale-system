@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html>
+
+<link rel="stylesheet" type="text/css"
+      href="{{ url_for('static', filename='css/main.css') }}"/>
+
 <head>
-    <title>{% block title %} {% endblock %}</title>
+    <title>
+        {% block title %} {% endblock %}
+    </title>
 </head>
 
 <body>
-{% block content %}
+    <div class="system_global_caption">
+        {% block header %}
+        {% endblock %}
+    </div>
 
-{% endblock %}
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block footer %}
+    {% endblock %}
 </body>
 </html>
