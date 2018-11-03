@@ -26,8 +26,10 @@ def ticket_view_specific():
     if len(request.args) == 0:
         return ticket_view_all()
 
-    sql_statement = sql_abstract_builder.build_multiple_select(
-        'tickets', j_const.all_ticket_properties, request.args
+    sql_statement = sql_abstract_builder.build_select_with_multiple_conditions(
+        table='tickets',
+        parameters=j_const.all_ticket_properties,
+        arguments=request.args
         )
 
     if sql_statement is not None:
@@ -102,8 +104,8 @@ def ticket_sell():
     coupon_data = json.get(j_const.coupon)
 
     # separate the cases of (only one) and (many) tickets being sold:
-    #  in case of one ticket, we operate with it as an "int"
-    #  in case of many tickets, we operate with them as a "tuple"
+    # in case of one ticket, we operate with it as an "int"
+    # in case of many tickets, we operate with them as a "tuple"
     tickets_ids = json.get(j_const.sell_tickets_id)
     if type(tickets_ids) is int:
         tickets_id = tickets_ids

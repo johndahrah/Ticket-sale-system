@@ -22,8 +22,11 @@ def organizers_view_all():
 def organizer_view_specific():
     if len(request.args) == 0:
         return organizers_view_all()
-    sql_statement = sql_abstract_builder.build_multiple_select(
-        'organizers', j_const.all_organizer_properties, request.args
+
+    sql_statement = sql_abstract_builder.build_select_with_multiple_conditions(
+        table='organizers',
+        parameters=j_const.all_organizer_properties,
+        arguments=request.args
         )
 
     if sql_statement is not None:

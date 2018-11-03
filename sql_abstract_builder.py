@@ -1,7 +1,7 @@
 from werkzeug import datastructures
 
 
-def build_multiple_select(
+def build_select_with_multiple_conditions(
         table: str, parameters: tuple, arguments: datastructures.MultiDict):
     """
     :param table: Table to build query for.
@@ -16,7 +16,6 @@ def build_multiple_select(
 
     """
     sql_statement = f'SELECT * FROM {table}'
-
     # the following line is for preventing IDE from "unexpected eol" warning
     sql_statement += ' WHERE '
     multiple_parameters = False
@@ -35,3 +34,36 @@ def build_multiple_select(
         return sql_statement
     else:
         return None
+
+
+def build_insert(
+        table: str, colomn_names: tuple, values: tuple, values_types: tuple):
+    # todo implement, for reference see TicketHandler's lines 51-75
+    sql_statement = f'INSERT INTO {table} ('
+
+    for col_name in colomn_names:
+        sql_statement += f'{col_name}, '
+    sql_statement = sql_statement[:-1]
+
+    sql_statement += ') VALUES ('
+
+    assert len(values) == len(values_types)
+    for i in range(0, len(values)):
+        value = values[i]
+        value_type = values_types[i]
+        use_backslash = value_type == 'str'
+
+        if use_backslash:
+            sql_statement += f'\'{value}\', '
+        else:
+            sql_statement += f'{value}, '
+
+    sql_statement = sql_statement[:-2]
+    sql_statement += ')'
+
+    return sql_statement
+
+
+def __init__():
+    # maybe set table name here?
+    ...
