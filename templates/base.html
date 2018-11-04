@@ -12,11 +12,22 @@
 
 <body>
     <div class="system_global_caption">
-        {% block header %}
-        {% endblock %}
+        Система продажи билетов
+    </div>
+
+    <div class="nav">
+        <ul>
+            <li><a  href="">Билеты</a> </li>
+            <li><a href="">Организаторы</a> </li>
+        </ul>
     </div>
 
     <div class="content">
+        <div class="content_caption">
+            {% block content_caption %}
+            {% endblock %}
+        </div>
+
         {% block content %}
         {% endblock %}
     </div>

@@ -4,18 +4,18 @@
 Sample test page
 {% endblock %}
 
-{% block header %}
+{% block content_caption %}
     TEST
 {% endblock %}
 
 {% block content %}
 
-    <table>
+    <table style="width: 100%">
         {% for i in attributes %}
             <tr> <th class="entry">
                 <b>{{ i.id }}</b> <br>
                 <hr>
-                name: <b>{{ i.name }}</b> <br>
+                name: <b>{{ i.name }}</b>,
                 address: <b>{{ i.address }}</b> <br>
             </th> </tr>
         {% endfor %}

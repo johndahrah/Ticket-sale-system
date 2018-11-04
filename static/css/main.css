@@ -1,16 +1,39 @@
 .system_global_caption {
-    font-size: xx-large;
+    background-color: #666;
+    padding: 30px;
     text-align: center;
-    margin-bottom: 30px;
-    padding: 10px;
-    border: 3px solid black;
+    font-size: 35px;
+    color: white;
 }
 
-.content {
-    font-size: medium;
+.content_caption {
+    padding: 10px;
+    text-align: center;
+    font-size: 20px;
 }
 
 .entry {
     border: 2px solid black;
     margin-bottom: 30px;
+}
+
+.nav {
+    box-sizing: border-box;
+    float: left;
+    width: 20%;
+    padding: 10px;
+}
+
+/* Style the list inside the menu */
+.nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.content {
+    box-sizing: border-box;
+    float: left;
+    padding: 20px;
+    width: 80%;
+    border-left: 1px solid black;
 }
