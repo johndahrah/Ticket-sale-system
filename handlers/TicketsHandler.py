@@ -34,8 +34,9 @@ def ticket_view_specific():
         )
 
     if sql_statement is not None:
-        result = db.execute(sql_statement)
-        return jsonify({'result': [dict(row) for row in result]})
+        result_sys = db.execute(sql_statement)
+        result = [dict(row) for row in result_sys]
+        return render_template('tickets_list.html', attributes=result)
     else:
         return 'no one correct json key found'
 
@@ -44,8 +45,9 @@ def ticket_view_specific():
 def ticket_view_by_id(ticket_id):
     sql_statement = f'SELECT * FROM tickets ' \
                     f'WHERE id = {ticket_id}'
-    result = db.execute(sql_statement)
-    return jsonify({'result': [dict(row) for row in result]})
+    result_sys = db.execute(sql_statement)
+    result = [dict(row) for row in result_sys]
+    return render_template('tickets_list.html', attributes=result)
 
 
 @tickets_handler.route('/add', methods=['POST'])
