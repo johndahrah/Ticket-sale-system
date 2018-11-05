@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Список билетов
+{% endblock %}
+
+
+{% block content_caption %}
+    Список билетов
+{% endblock %}
+
+
+{% block content %}
+    <table class="entries-list">
+        {% for i in attributes %}
+            <tr>
+                {% if i.openedforselling and not i.issold %}
+                    <th class="ticket-opened-not-sold">
+                {% endif %}
+
+                {% if i.openedforselling and i.issold %}
+                    <th class="ticket-opened-sold">
+                {% endif %}
+
+                {% if not i.openedforselling %}
+                    <th class="ticket-not-opened">
+                {% endif %}
+
+                <b> {{ i.serialnumber }} </b>
+                <hr>
+                {{ i.eventdate }} в {{ i.eventtime }},
+                организатор - {{ i.eventorganizername }}
+                (адрес - {{ i.eventplace }})
+            </th> </tr>
+{#            {{ i }}#}
+        {% endfor %}
+    </table>
+{% endblock %}

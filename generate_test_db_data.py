@@ -20,7 +20,7 @@ tickets_data = [
                          # (not stored in the database)
      },
 
-    {1: True,
+    {1: False,
      2: '01.04.2020',
      3: '18.00',
      4: 'Street 2',
@@ -70,6 +70,6 @@ def generate(db, clear_existing=False):
                             f'VALUES (' \
                             f'{i[1]}, \'{i[2]}\', \'{i[3]}\', \'{i[4]}\', ' \
                             f'\'{i[5]}\', {i[6]}, \'{i[7]}\', \'{i[8]}\', ' \
-                            f'\'{i[9] + str(j+1)}\', {i[10]}' \
+                            f'\'{i[9] + str(j+1)}\', {j%10==0}' \
                             f');'
             db.execute(sql_statement);

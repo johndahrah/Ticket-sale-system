@@ -1,6 +1,6 @@
 import datetime
 
-from flask import jsonify, request, Blueprint
+from flask import jsonify, request, Blueprint,render_template
 from sqlalchemy.engine import ResultProxy
 from sqlalchemy.exc import DataError
 
@@ -15,10 +15,11 @@ tickets_handler = Blueprint(
 
 @tickets_handler.route('/view/all', methods=['GET'])
 def ticket_view_all():
-    result = db.execute(
+    result_sys = db.execute(
         'SELECT * FROM tickets'
         )
-    return jsonify({'result': [dict(row) for row in result]})
+    result = [dict(row) for row in result_sys]
+    return render_template('tickets_list.html', attributes=result)
 
 
 @tickets_handler.route('/view', methods=['GET'])

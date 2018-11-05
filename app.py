@@ -30,7 +30,7 @@ app.register_blueprint(organizers_handler)
 
 @app.route('/')
 def test():
-    # return render_template('test.html')
+    # return render_template('organizers_list.html')
     return 'ok'
 
 

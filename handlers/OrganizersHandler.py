@@ -16,7 +16,7 @@ def organizers_view_all():
         'SELECT * FROM organizers'
         )
     result = [dict(row) for row in result_sys]
-    return render_template('test.html', attributes=result)
+    return render_template('organizers_list.html', attributes=result)
 
 
 @organizers_handler.route('/view', methods=['GET'])

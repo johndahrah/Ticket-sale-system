@@ -40,3 +40,27 @@
     width: 80%;
     border-left: 1px solid black;
 }
+
+table.entries-list {
+    width: 100%;
+    text-align: left;
+}
+
+.ticket-opened-not-sold {
+    border: 2px solid black;
+    font-weight: normal;
+    background-color: rgba(59, 255, 59, 0.21);
+
+}
+
+.ticket-opened-sold {
+    border: 2px solid black;
+    font-weight: normal;
+    background-color: lightcoral;
+}
+
+.ticket-not-opened {
+    border: 2px solid black;
+    font-weight: normal;
+    background-color: lightgrey;
+}
