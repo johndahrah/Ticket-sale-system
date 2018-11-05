@@ -43,7 +43,25 @@ def build_select_with_multiple_conditions(
 
 
 def build_insert_of_single_entry(
-        table: str, column_names: tuple=None, values: tuple=None):
+        table: str, column_names: tuple=None,
+        values: tuple=None, returning_column: str=None):
+    """
+    :param table:
+        table to build query for
+    :param column_names:
+        represents table.columns.
+        in case of None, query fills the entire row
+    :param values:
+        values to insert in a new row.
+        The type of values defines the use of the < ' > symbol,
+        to specify a data type to be inserted.
+        Therefore, it's a good idea to use an explicit cast of types,
+        especially strings: str(string_data)
+    :param returning_column:
+        if not None, specifies the column.name to return
+        after the statement will be executed
+    :return: 'str' object containing sql query
+    """
     sql_statement = f'INSERT INTO {table}'
 
     if column_names is not None:
@@ -57,16 +75,17 @@ def build_insert_of_single_entry(
 
     for i in range(0, len(values)):
         value = values[i]
-        value_type = type(value)
-        use_backslash = value_type is str
 
-        if use_backslash:
+        if type(value) is str:
             sql_statement += f'\'{value}\', '
         else:
             sql_statement += f'{value}, '
 
     sql_statement = sql_statement[:-2]  # remove the trailing comma
     sql_statement += ')'
+
+    if returning_column is not None:
+        sql_statement += f' RETURNING {returning_column}'
 
     return sql_statement
 

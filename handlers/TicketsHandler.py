@@ -47,8 +47,11 @@ def ticket_view_by_id(ticket_id):
     return jsonify({'result': [dict(row) for row in result]})
 
 
-@tickets_handler.route('/add', methods=['GET', 'POST'])
+@tickets_handler.route('/add', methods=['POST'])
 def ticket_add():
+    """
+    required json: see column_names below
+    """
     i = dict(request.get_json())
     try:
         sql_statement = sql_bld.build_insert_of_single_entry(
@@ -73,7 +76,6 @@ def ticket_add():
 
 
 def at_least_one_ticket_is_already_sold(tickets_id):
-    # todo: implement
     sql_statement = f'SELECT * from tickets ' \
                     f'WHERE issold = TRUE '
     sql_statement += ' and '
@@ -103,6 +105,9 @@ def at_least_one_ticket_is_closed_for_sale(tickets_id):
 
 @tickets_handler.route('/sell', methods=['POST'])
 def ticket_sell():
+    """
+    required json: sell_tickets_id (int or tuple), (coupon), userID
+    """
     now = datetime.datetime.now()
     date = str(now.date())
     json = dict(request.json)
@@ -125,9 +130,11 @@ def ticket_sell():
 
     # insert the possible coupon data into the database
     if coupon_data is not None:
-        sql_statement = f'INSERT INTO coupons ' \
-                        f'(dateUsed, couponData) ' \
-                        f'VALUES (\'{date}\', \'{coupon_data}\')'
+        sql_statement = sql_bld.build_insert_of_single_entry(
+            table='coupons',
+            column_names=('dateUsed', 'couponData'),
+            values=(str(date), str(coupon_data))
+            )
         db.execute(sql_statement)
 
     # mark necessary tickets as "sold"
@@ -150,26 +157,31 @@ def ticket_sell():
     coupon_id = receive_sql_query_result(sql_statement)
 
     # insert all data in "checks" table and receive the id of a new record
-    sql_statement = f'INSERT INTO checks ' \
-                    f'(TicketsAmount, TotalPrice, ' \
-                    f'CouponUsed, CouponID, WorkerID) ' \
-                    f'VALUES (' \
-                    f'{1 if type (tickets_ids) is int else len(tickets_id)},' \
-                    f'{total_price}, {coupon_data is not None}, ' \
-                    f'{"null" if coupon_id is None else coupon_id}, ' \
-                    f'{worker_id}) ' \
-                    f'RETURNING id'
+    sql_statement = sql_bld.build_insert_of_single_entry(
+        table='checks',
+        column_names=('TicketsAmount', 'TotalPrice',
+                      'CouponUsed', 'CouponID', 'WorkerID'),
+        values=(1 if type(tickets_ids) is int else len(tickets_id),
+                total_price, coupon_data is not None,
+                "null" if coupon_id is None else coupon_id,
+                worker_id),
+        returning_column='id'
+        )
     check_id = receive_sql_query_result(sql_statement)
 
     # create a one-to-many relationship check<->ticket
     try:
         for ticket_id in tickets_id:
-            sql_statement = f'INSERT INTO check_ticketsid VALUES ' \
-                            f'({check_id}, {ticket_id})'
+            sql_statement = sql_bld.build_insert_of_single_entry(
+                table='check_ticketsid',
+                values=(check_id, ticket_id)
+                )
             db.execute(sql_statement)
     except TypeError:  # 'int' object is not iterable
-        sql_statement = f'INSERT INTO check_ticketsid VALUES ' \
-                        f'({check_id}, {tickets_id})'
+        sql_statement = sql_bld.build_insert_of_single_entry(
+            table='check_ticketsid',
+            values=(check_id, tickets_id)
+            )
         db.execute(sql_statement)
     return 'ok'
 
@@ -194,6 +206,9 @@ def receive_sql_query_result(sql_statement):
 
 @tickets_handler.route('/modify/<ticket_id>', methods=['GET', 'POST'])
 def ticket_modify(ticket_id):
+    """
+    required json: ticket_id, data_to_change
+    """
     if not ticket_id_exists(ticket_id):
         return 'no ticket with such ID'
 
