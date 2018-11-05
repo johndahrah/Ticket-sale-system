@@ -6,7 +6,7 @@ from sqlalchemy.exc import DataError
 
 import json_text_constants as j_const
 from app import db
-import sql_abstract_builder
+import sql_abstract_builder as sql_bld
 
 tickets_handler = Blueprint(
     'tickets_handler', __name__, url_prefix='/api/ticket'
@@ -26,7 +26,7 @@ def ticket_view_specific():
     if len(request.args) == 0:
         return ticket_view_all()
 
-    sql_statement = sql_abstract_builder.build_select_with_multiple_conditions(
+    sql_statement = sql_bld.build_select_with_multiple_conditions(
         table='tickets',
         parameters=j_const.all_ticket_properties,
         arguments=request.args
@@ -51,21 +51,18 @@ def ticket_view_by_id(ticket_id):
 def ticket_add():
     i = dict(request.get_json())
     try:
-        sql_statement = f'INSERT INTO tickets ' \
-                        f'(OpenedForSelling, EventDate, EventTime, ' \
-                        f'EventPlace, EventOrganizerName, SellPrice, ' \
-                        f'Comment, OrganizerID, SerialNumber, isSold) ' \
-                        f'VALUES (' \
-                        f'{i[j_const.opened]}, ' \
-                        f'\'{i[j_const.date]}\', ' \
-                        f'\'{i[j_const.time]}\', ' \
-                        f'\'{i[j_const.place]}\', ' \
-                        f'\'{i[j_const.organizer]}\', ' \
-                        f'{i[j_const.price]}, ' \
-                        f'\'{i[j_const.comment]}\', ' \
-                        f'\'{i[j_const.organizerid]}\', ' \
-                        f'\'{i[j_const.serial]}\', {False}' \
-                        f');'
+        sql_statement = sql_bld.build_insert_of_single_entry(
+            table='tickets',
+            column_names=('openedForSelling', 'eventDate', 'eventTime',
+                          'eventPlace', 'eventOrganizerName', 'sellPrice',
+                          'comment', 'organizerID', 'serialNumber', 'isSold'
+                          ),
+            values=(i[j_const.opened], str(i[j_const.date]),
+                    str(i[j_const.time]), str(i[j_const.place]),
+                    str(i[j_const.organizer]), i[j_const.price],
+                    str(i[j_const.comment]), str(i[j_const.organizerid]),
+                    str(i[j_const.serial]), False)
+            )
     except KeyError as e:
         return f'invalid json key has been received, check: {e}'
     try:
@@ -77,7 +74,15 @@ def ticket_add():
 
 def at_least_one_ticket_is_already_sold(tickets_id):
     # todo: implement
-    return False
+    sql_statement = f'SELECT * from tickets ' \
+                    f'WHERE issold = TRUE '
+    sql_statement += ' and '
+    if type(tickets_id) is int:
+        sql_statement += f'id = {tickets_id}'
+    else:  # it is tuple
+        sql_statement += f'id IN {tickets_id}'
+    result = receive_sql_query_result(sql_statement)
+    return result is not None
 
 
 def at_least_one_ticket_is_closed_for_sale(tickets_id):
