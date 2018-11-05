@@ -9,37 +9,37 @@ tickets_data = [
     {1: True,         # OpenedForSelling
      2: '18.08.2019',  # EventDate
      3: '19.00',       # EventTime
-     4: 'Street 1',    # EventPlace
-     5: 'Theatre',     # EventOrganizerName
+     4: 'Театральная пл., 1',    # EventPlace
+     5: 'Большой театр',     # EventOrganizerName
      6: 1000,          # SellPrice
      7: '',            # Comment
      8: '1',           # OrganizerID
-     9: 'ABC000',      # SerialNumber
+     9: 'ABC000',      # SerialNumberPrefix
      10: False,        # isSold
-     11: 'Name 1',     # eventName
-     'amount': 100       # the amount of the tickets for this performance
+     11: 'Пиковая дама',     # eventName
+     'amount': 20       # the amount of the tickets for this performance
                          # (not stored in the database)
      },
 
     {1: False,
      2: '01.04.2020',
      3: '18.00',
-     4: 'Street 2',
-     5: 'Theatre 2',
+     4: 'Театральный проезд, д. 1',
+     5: 'Малый театр',
      6: 1500,
-     7: 'Enter before 17:30',
+     7: 'Вход до 17:30',
      8: '2',
      9: 'TIC',
      10: False,
-     11: 'Name 2',
-     'amount': 50
+     11: 'Сказка о царе Салтане',
+     'amount': 10
      }
 ]
 
 organizers_data = [
     # id, name, address
-    ('1', 'Theatre 1', 'Street 1'),
-    ('2', 'Theatre 2', 'Street 2')
+    ('1', 'Большой театр', 'Театральная пл., 1'),
+    ('2', 'Малый театр', 'Театральный проезд, д. 1')
 ]
 
 
@@ -73,6 +73,6 @@ def generate(db, clear_existing=False):
                             f'VALUES (' \
                             f'{i[1]}, \'{i[2]}\', \'{i[3]}\', \'{i[4]}\', ' \
                             f'\'{i[5]}\', {i[6]}, \'{i[7]}\', \'{i[8]}\', ' \
-                            f'\'{i[9] + str(j+1)}\', {j%10==0}, \'{i[11]}\'' \
+                            f'\'{i[9] + str(j+1)}\', {j%5==0}, \'{i[11]}\'' \
                             f');'
             db.execute(sql_statement);
