@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Sample test page
+Список организаторов
 {% endblock %}
 
 {% block content_caption %}
-    TEST
+    Список организаторов
 {% endblock %}
 
 {% block content %}
@@ -15,8 +15,8 @@ Sample test page
             <tr> <th class="entry">
                 <b>{{ i.id }}</b> <br>
                 <hr>
-                name: <b>{{ i.name }}</b>,
-                address: <b>{{ i.address }}</b> <br>
+                Организатор: <b>{{ i.name }}</b>,
+                Адрес: <b>{{ i.address }}</b> <br>
             </th> </tr>
         {% endfor %}
     </table>

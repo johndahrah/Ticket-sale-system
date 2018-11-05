@@ -1,15 +1,18 @@
 .system_global_caption {
-    background-color: #666;
+    background-color: #777;
     padding: 30px;
+    margin-bottom: 10px;
     text-align: center;
     font-size: 35px;
     color: white;
 }
 
 .content_caption {
-    padding: 10px;
+    padding-bottom: 5px;
     text-align: center;
-    font-size: 20px;
+    font-size: 25px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid black;
 }
 
 .entry {
