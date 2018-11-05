@@ -11,29 +11,38 @@
 
 
 {% block content %}
-    <table class="entries-list">
-        {% for i in attributes %}
+    {% for i in attributes %}
+
+        {% if i.openedforselling and not i.issold %}
+            <table class="ticket-opened-not-sold">
+        {% endif %}
+
+        {% if i.openedforselling and i.issold %}
+            <table class="ticket-opened-sold">
+        {% endif %}
+
+        {% if not i.openedforselling %}
+            <table class="ticket-not-opened">
+        {% endif %}
+
             <tr>
-                {% if i.openedforselling and not i.issold %}
-                    <th class="ticket-opened-not-sold">
-                {% endif %}
+                <th colspan=3>
+                    {{ i.eventorganizername }}, {{ i.eventplace }} <br>
+                    {{ i.eventname }}
+                </th>
+            </tr>
+            <tr>
+                <td>Дата: {{ i.eventdate }}<br>
+                    Время: {{ i.eventtime }}</td>
+                <td>Цена: {{ i.sellprice }}</td>
+                <td>{{ i.serialnumber }}</td>
+            </tr>
 
-                {% if i.openedforselling and i.issold %}
-                    <th class="ticket-opened-sold">
-                {% endif %}
-
-                {% if not i.openedforselling %}
-                    <th class="ticket-not-opened">
-                {% endif %}
-
-                <b> {{ i.serialnumber }} </b>
-                <hr>
-                <b> {{ i.eventname }} </b> <br>
-                {{ i.eventdate }} в {{ i.eventtime }},
-                организатор - {{ i.eventorganizername }}
-                (адрес - {{ i.eventplace }})
-            </th> </tr>
-{#            {{ i }}#}
-        {% endfor %}
-    </table>
+            {% if i.comment != "" %}
+                <tr>
+                    <th colspan=3>{{ i.comment }}</th>
+                </tr>
+            {% endif %}
+        </table>
+    {% endfor %}
 {% endblock %}

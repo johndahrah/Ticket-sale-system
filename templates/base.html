@@ -10,15 +10,19 @@
     </title>
 </head>
 
-<body>
+<body> <div class="narrow-body">
     <div class="system_global_caption">
         Система продажи билетов
     </div>
 
     <div class="nav">
         <ul>
-            <li><a  href="">Билеты</a> </li>
-            <li><a href="">Организаторы</a> </li>
+            <li><a href="{{
+                    url_for('tickets_handler.ticket_view_all')
+                    }}">Билеты</a> </li>
+            <li><a href="{{
+                    url_for('organizers_handler.organizers_view_all')
+                    }}">Организаторы</a> </li>
         </ul>
     </div>
 
@@ -34,5 +38,5 @@
 
     {% block footer %}
     {% endblock %}
-</body>
+</div> </body>
 </html>

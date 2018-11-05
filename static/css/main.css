@@ -7,6 +7,11 @@
     color: white;
 }
 
+.narrow-body {
+    width: 800px;
+    margin: 0 auto;
+}
+
 .content_caption {
     padding-bottom: 5px;
     text-align: center;
@@ -47,20 +52,31 @@ table.entries-list {
 }
 
 .ticket-opened-not-sold {
+    border-collapse: collapse;
     border: 2px solid black;
-    font-weight: normal;
     background-color: rgba(59, 255, 59, 0.21);
-
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .ticket-opened-sold {
+    border-collapse: collapse;
     border: 2px solid black;
-    font-weight: normal;
     background-color: lightcoral;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .ticket-not-opened {
+    border-collapse: collapse;
     border: 2px solid black;
-    font-weight: normal;
     background-color: lightgrey;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid black;
+    padding-left: 10px;
+    padding-right: 10px;
 }
