@@ -16,6 +16,7 @@ tickets_data = [
      8: '1',           # OrganizerID
      9: 'ABC000',      # SerialNumber
      10: False,        # isSold
+     11: 'Name 1',     # eventName
      'amount': 100       # the amount of the tickets for this performance
                          # (not stored in the database)
      },
@@ -30,6 +31,7 @@ tickets_data = [
      8: '2',
      9: 'TIC',
      10: False,
+     11: 'Name 2',
      'amount': 50
      }
 ]
@@ -66,10 +68,11 @@ def generate(db, clear_existing=False):
             sql_statement = f'INSERT INTO tickets ' \
                             f'(OpenedForSelling, EventDate, EventTime, ' \
                             f'EventPlace, EventOrganizerName, SellPrice, ' \
-                            f'Comment, OrganizerID, SerialNumber, isSold) ' \
+                            f'Comment, OrganizerID, SerialNumber, isSold, ' \
+                            f'eventName) ' \
                             f'VALUES (' \
                             f'{i[1]}, \'{i[2]}\', \'{i[3]}\', \'{i[4]}\', ' \
                             f'\'{i[5]}\', {i[6]}, \'{i[7]}\', \'{i[8]}\', ' \
-                            f'\'{i[9] + str(j+1)}\', {j%10==0}' \
+                            f'\'{i[9] + str(j+1)}\', {j%10==0}, \'{i[11]}\'' \
                             f');'
             db.execute(sql_statement);

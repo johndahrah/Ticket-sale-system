@@ -59,13 +59,13 @@ def ticket_add():
             table='tickets',
             column_names=('openedForSelling', 'eventDate', 'eventTime',
                           'eventPlace', 'eventOrganizerName', 'sellPrice',
-                          'comment', 'organizerID', 'serialNumber', 'isSold'
-                          ),
+                          'comment', 'organizerID', 'serialNumber', 'isSold',
+                          'eventName'),
             values=(i[j_const.opened], str(i[j_const.date]),
                     str(i[j_const.time]), str(i[j_const.place]),
                     str(i[j_const.organizer]), i[j_const.price],
                     str(i[j_const.comment]), str(i[j_const.organizerid]),
-                    str(i[j_const.serial]), False)
+                    str(i[j_const.serial]), False, str(i[j_const.event_name]))
             )
     except KeyError as e:
         return f'invalid json key has been received, check: {e}'

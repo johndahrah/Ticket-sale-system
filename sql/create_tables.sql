@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS Checks (
 CREATE TABLE IF NOT EXISTS Tickets (
   ID                    SERIAL NOT NULL,
   OpenedForSelling      BOOLEAN NOT NULL,
+  EventName             varchar(255),
   EventDate             varchar(255),
   EventTime             varchar(255),
   EventPlace            varchar(255),

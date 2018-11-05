@@ -7,6 +7,7 @@ userID = 'userid'
 
 # tickets
 opened = 'openedforselling'
+event_name = 'eventname'
 date = 'eventdate'
 time = 'eventtime'
 place = 'eventplace'
@@ -17,7 +18,7 @@ organizerid = 'organizerid'
 serial = 'serialnumber'
 id = 'id'
 all_ticket_properties = (
-    id, opened, date, time, place,
+    id, event_name, opened, date, time, place,
     organizer, price, comment, organizerid, serial
     )
 sell_tickets_id = 'selling'
