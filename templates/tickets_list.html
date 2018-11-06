@@ -11,38 +11,7 @@
 
 
 {% block content %}
-    {% for i in attributes %}
-
-        {% if i.openedforselling and not i.issold %}
-            <table class="ticket-opened-not-sold">
-        {% endif %}
-
-        {% if i.openedforselling and i.issold %}
-            <table class="ticket-opened-sold">
-        {% endif %}
-
-        {% if not i.openedforselling %}
-            <table class="ticket-not-opened">
-        {% endif %}
-
-            <tr>
-                <th colspan=3>
-                    {{ i.eventorganizername }}, {{ i.eventplace }} <br>
-                    {{ i.eventname }}
-                </th>
-            </tr>
-            <tr>
-                <td>Дата: {{ i.eventdate }}<br>
-                    Время: {{ i.eventtime }}</td>
-                <td>Цена: {{ i.sellprice }}</td>
-                <td>{{ i.serialnumber }}</td>
-            </tr>
-
-            {% if i.comment != "" %}
-                <tr>
-                    <th colspan=3>{{ i.comment }}</th>
-                </tr>
-            {% endif %}
-        </table>
+    {% for entry in attributes %}
+        {% include 'ticket_entry.html' %}
     {% endfor %}
 {% endblock %}

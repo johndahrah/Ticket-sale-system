@@ -62,9 +62,12 @@ table.entries-list {
 .ticket-opened-sold {
     border-collapse: collapse;
     border: 2px solid black;
-    background-color: lightcoral;
     margin-bottom: 20px;
     width: 100%;
+    background: lightcoral linear-gradient(
+            to left bottom, transparent calc(50% - 1px), black,
+            transparent calc(50% + 1px)
+    );
 }
 
 .ticket-not-opened {

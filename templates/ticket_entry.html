@@ -1,0 +1,31 @@
+{% if entry.openedforselling and not entry.issold %}
+    <table class="ticket-opened-not-sold">
+{% endif %}
+
+{% if entry.openedforselling and entry.issold %}
+    <table class="ticket-opened-sold">
+{% endif %}
+
+{% if not entry.openedforselling %}
+    <table class="ticket-not-opened">
+{% endif %}
+
+    <tr>
+        <th colspan=3>
+            {{ entry.eventorganizername }}, {{ entry.eventplace }} <br>
+            {{ entry.eventname }}
+        </th>
+    </tr>
+    <tr>
+        <td>Дата: {{ entry.eventdate }}<br>
+            Время: {{ entry.eventtime }}</td>
+        <td>Цена: {{ entry.sellprice }}</td>
+        <td>{{ entry.serialnumber }}</td>
+    </tr>
+
+    {% if entry.comment != "" %}
+        <tr>
+            <th colspan=3>{{ entry.comment }}</th>
+        </tr>
+    {% endif %}
+</table>
