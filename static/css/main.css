@@ -83,3 +83,11 @@ td, th {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+.above-content {
+    padding-bottom: 5px;
+}
+
+.search-input {
+    margin-bottom: 5px;
+}

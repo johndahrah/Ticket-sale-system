@@ -11,6 +11,10 @@
 </head>
 
 <body> <div class="narrow-body">
+
+    {% block script %}
+    {% endblock %}
+
     <div class="system_global_caption">
         Система продажи билетов
     </div>
@@ -29,6 +33,11 @@
     <div class="content">
         <div class="content_caption">
             {% block content_caption %}
+            {% endblock %}
+        </div>
+
+        <div class="above-content">
+            {% block above_content %}
             {% endblock %}
         </div>
 
