@@ -1,8 +1,10 @@
 function disableEmptyInputs(form) {
-  var controls = form.elements;
-  for (var i=0, iLen=controls.length; i<iLen; i++) {
-    controls[i].disabled = controls[i].value == '';
-  }
-}
+    const controls = form.elements;
 
-console.log("TEST");
+    for (let i=0; i<controls.length; i++) {
+        controls[i].disabled = controls[i].value === '';
+        if (controls[i].className === 'search-input-text') {
+            controls[i].value = '\'' + controls[i].value + '\'';
+        }
+    }
+}

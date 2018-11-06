@@ -88,6 +88,12 @@ td, th {
     padding-bottom: 5px;
 }
 
-.search-input {
+.search-input-text {
     margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.search-input-number {
+    margin-bottom: 5px;
+    margin-right: 10px;
 }
