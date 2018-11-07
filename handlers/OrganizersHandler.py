@@ -52,6 +52,32 @@ def organizer_add():
         return 'organizer with such id already exists!'
 
 
+@organizers_handler.route('/modify/<organizer_id>', methods=['POST'])
+def organizer_modify(organizer_id):
+    """
+    required json: data_to_change (can not include ID)
+    """
+    if not_exists(organizer_id):
+        return 'id not exists'
+
+    json_dict = dict(request.get_json())
+    if json_dict.get('id') is not None:
+        return 'you can not modify organizer\'s ID!'
+
+    sql_statement = f'UPDATE organizers SET '
+    more_than_one_argument = False
+    for i in j_const.all_organizer_properties:
+        argument = json_dict.get(i)
+        if argument is not None:
+            if more_than_one_argument:
+                sql_statement += ' , '
+            sql_statement += f'{i} = {argument}'
+            more_than_one_argument = True
+    sql_statement += f'WHERE id = {organizer_id}'
+    db.execute(sql_statement)
+    return 'ok'
+
+
 def not_exists(organizer_id):
     sql_statement = f'SELECT * FROM organizers ' \
                     f'WHERE ID = {organizer_id}'
