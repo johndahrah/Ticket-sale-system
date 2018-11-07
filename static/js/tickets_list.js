@@ -8,3 +8,7 @@ function disableEmptyInputs(form) {
         }
     }
 }
+
+function sellTickets() {
+    
+}

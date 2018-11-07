@@ -1,13 +1,13 @@
 {% if entry.openedforselling and not entry.issold %}
-    <table class="ticket-opened-not-sold">
+    <table class="ticket-opened-not-sold" id = {{ entry.id }}>
 {% endif %}
 
 {% if entry.openedforselling and entry.issold %}
-    <table class="ticket-opened-sold">
+    <table class="ticket-opened-sold" id = {{ entry.id }}>
 {% endif %}
 
 {% if not entry.openedforselling %}
-    <table class="ticket-not-opened">
+    <table class="ticket-not-opened" id = {{ entry.id }}>
 {% endif %}
 
     <tr>
