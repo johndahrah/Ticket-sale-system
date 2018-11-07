@@ -1,6 +1,6 @@
 import re
 
-from flask import Flask, render_template
+from flask import Flask
 from sqlalchemy import *
 
 import generate_test_db_data
@@ -65,6 +65,11 @@ def execute_sql_commands(content):
             # (as a result of a possible semicolon after the last statement)
             db.execute(i)
     return 'ok'
+
+
+@app.route('/favicon.ico')
+def send_favicon():
+    return ''
 
 
 drop_all_tables()
