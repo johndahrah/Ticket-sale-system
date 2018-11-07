@@ -234,6 +234,16 @@ def ticket_modify(ticket_id):
     return 'ok'
 
 
+@tickets_handler.route('/delete/<ticket_id>', methods=['POST'])
+def ticket_delete(ticket_id):
+    if not ticket_id_exists(ticket_id):
+        return 'the ticket with given ID does not exist'
+    sql_statement = f'DELETE FROM tickets ' \
+                    f'WHERE id = {ticket_id}'
+    db.execute(sql_statement)
+    return 'ok'
+
+
 def ticket_id_exists(ticket_id):
     sql_check_id_statement = f'SELECT * FROM tickets ' \
                              f'WHERE id = {ticket_id}'

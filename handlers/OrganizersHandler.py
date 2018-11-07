@@ -1,5 +1,5 @@
 from flask import request, Blueprint, jsonify, render_template
-from sqlalchemy import engine
+from sqlalchemy import engine, exc
 
 import json_text_constants as j_const
 import sql_abstract_builder as sql_bld
@@ -41,7 +41,7 @@ def organizer_view_specific():
 def organizer_add():
     content = dict(request.get_json())
     organizer_id, name, address = get_organizer_data(content)
-    if not_exists(organizer_id):
+    if not organizer_exists(organizer_id):
         sql_statement = sql_bld.build_insert_of_single_entry(
             table='organizers',
             values=(organizer_id, str(name), str(address))
@@ -57,7 +57,7 @@ def organizer_modify(organizer_id):
     """
     required json: data_to_change (can not include ID)
     """
-    if not_exists(organizer_id):
+    if not organizer_exists(organizer_id):
         return 'id not exists'
 
     json_dict = dict(request.get_json())
@@ -78,11 +78,26 @@ def organizer_modify(organizer_id):
     return 'ok'
 
 
-def not_exists(organizer_id):
+@organizers_handler.route('/delete/<organizer_id>')
+def organizer_delete(organizer_id):
+    if not organizer_exists(organizer_id):
+        return 'organizer with given ID does not exist'
+    sql_statement = f'DELETE FROM organizers ' \
+                    f'WHERE id = {organizer_id}'
+    try:
+        db.execute(sql_statement)
+    except exc.IntegrityError as e:
+        # prevent violating foreign key constraint on table tickets,
+        # in most common case.
+        return 'you can not delete this organizer: <br>' + str(e)
+    return 'ok'
+
+
+def organizer_exists(organizer_id):
     sql_statement = f'SELECT * FROM organizers ' \
-                    f'WHERE ID = {organizer_id}'
+                    f'WHERE id = {organizer_id}'
     result: engine.ResultProxy = db.execute(sql_statement)
-    return result.rowcount == 0
+    return result.rowcount != 0
 
 
 def get_organizer_data(content):
