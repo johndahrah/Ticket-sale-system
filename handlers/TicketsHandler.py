@@ -1,12 +1,13 @@
 import datetime
 
-from flask import jsonify, request, Blueprint,render_template
+from flask import request, Blueprint, render_template
 from sqlalchemy.engine import ResultProxy
 from sqlalchemy.exc import DataError
 
 import json_text_constants as j_const
 from app import db
 import sql_abstract_builder as sql_bld
+from handlers import CouponsHandler
 
 tickets_handler = Blueprint(
     'tickets_handler', __name__, url_prefix='/api/ticket'
@@ -125,11 +126,15 @@ def ticket_sell():
     else:
         tickets_id = tuple(json.get(j_const.sell_tickets_id))
 
+    # checking request data validity. todo: replace return 'str' with abort(400)
     if at_least_one_ticket_is_already_sold(tickets_id):
         return 'One or more chosen tickets are already sold'
 
     if at_least_one_ticket_is_closed_for_sale(tickets_id):
         return 'One or more chosen tickets are closed for sale'
+
+    if coupon_data is not None and not CouponsHandler.is_valid(coupon_data):
+        return 'coupon is not valid'
 
     # insert the possible coupon data into the database
     if coupon_data is not None:

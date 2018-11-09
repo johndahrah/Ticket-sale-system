@@ -25,3 +25,9 @@ def coupons_add():
     return abort(405)
 
 
+# don't @route anything here
+# to avoid finding valid coupon via brute force
+def is_valid(data: str):
+    # something simple for now.
+    # e.g.      7SAMPLE (valid)
+    return len(data) == data[0]
