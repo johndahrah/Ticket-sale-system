@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Список купонов
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}
+
+
+{% block content_caption %}
+    Список купонов
+{% endblock %}
+
+
+{% block above_content %}
+{% endblock %}
+
+
+{% block content %}
+    {% for i in attributes %}
+        Контрольная строка: <b>"{{ i.coupondata }}"</b>,
+        дата использования: <b>{{ i.dateused }}</b> <hr>
+    {% endfor %}
+{% endblock %}

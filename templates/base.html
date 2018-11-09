@@ -27,6 +27,9 @@
             <li><a href="{{
                     url_for('organizers_handler.organizers_view_all')
                     }}">Организаторы</a> </li>
+            <li><a href="{{
+                    url_for('coupons_handler.coupons_view_all')
+                    }}">Купоны</a> </li>
         </ul>
     </div>
 
@@ -44,8 +47,5 @@
         {% block content %}
         {% endblock %}
     </div>
-
-    {% block footer %}
-    {% endblock %}
 </div> </body>
 </html>
