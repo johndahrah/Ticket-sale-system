@@ -30,4 +30,7 @@ def coupons_add():
 def is_valid(data: str):
     # something simple for now.
     # e.g.      7SAMPLE (valid)
-    return len(data) == data[0]
+    try:
+        return len(data) == int(data[0])
+    except ValueError:  # the first symbol is not a number
+        return False
