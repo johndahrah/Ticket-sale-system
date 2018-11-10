@@ -24,10 +24,12 @@ from handlers.TicketsHandler import tickets_handler
 from handlers.UsersHandler import users_handler
 from handlers.OrganizersHandler import organizers_handler
 from handlers.CouponsHandler import coupons_handler
+import StatisticsGenerator
 app.register_blueprint(tickets_handler)
 app.register_blueprint(users_handler)
 app.register_blueprint(organizers_handler)
 app.register_blueprint(coupons_handler)
+app.register_blueprint(StatisticsGenerator.statistics_generator)
 
 
 @app.route('/')
