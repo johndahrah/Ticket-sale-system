@@ -39,6 +39,16 @@
     padding-bottom: 5px;
 }
 
+.above-content-sticky {
+    background: #ffffff;
+    /*line-height: 12px;*/
+    margin-top: 10px;
+    font-size: 30px;
+    position: sticky;
+    top: 0;
+    margin-bottom: 10px;
+}
+
 /* Style the list inside the menu */
 .nav ul {
     list-style-type: none;

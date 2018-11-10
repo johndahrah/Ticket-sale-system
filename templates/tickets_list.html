@@ -33,15 +33,17 @@
     </form>
 {% endblock %}
 
-{% block content %}
-    {% for entry in attributes %}
-        {% include 'ticket_entry.html' %}
-    {% endfor %}
-
-    <form class="acion-form">
-        <div class="action-form-label">Доступные действия:</div>
+{% block above_content_sticky %}
+    <form class="action-form">
+{#        <div class="action-form-label">Доступные действия:</div>#}
         <button type="button" class="action-button" onclick="sellTickets()">Продать</button>
         <button type="button" class="action-button">Удалить</button>
         <button type="button" class="action-button">Изменить</button>
     </form>
+{% endblock %}
+
+{% block content %}
+    {% for entry in attributes %}
+        {% include 'ticket_entry.html' %}
+    {% endfor %}
 {% endblock %}
