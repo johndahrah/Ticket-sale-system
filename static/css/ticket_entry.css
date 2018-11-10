@@ -1,6 +1,6 @@
 .ticket-opened-not-sold {
     border-collapse: collapse;
-    border: 2px solid black;
+    border: 1px solid black;
     background-color: rgba(59, 255, 59, 0.21);
     margin-bottom: 20px;
     width: 100%;
@@ -8,7 +8,7 @@
 
 .ticket-opened-sold {
     border-collapse: collapse;
-    border: 2px solid black;
+    border: 1px solid black;
     margin-bottom: 20px;
     width: 100%;
     background: lightcoral linear-gradient(
@@ -19,10 +19,15 @@
 
 .ticket-not-opened {
     border-collapse: collapse;
-    border: 2px solid black;
+    border: 1px solid black;
     background-color: lightgrey;
     margin-bottom: 20px;
     width: 100%;
+}
+
+.ticket-selected {
+    border-collapse: collapse;
+    border: 3px solid black;
 }
 
 td, th {
