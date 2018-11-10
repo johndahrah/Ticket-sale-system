@@ -1,4 +1,4 @@
-from flask import Blueprint, abort
+from flask import Blueprint
 from sqlalchemy import exc
 
 from app import db
@@ -34,5 +34,20 @@ def generate_coupons_statistics():
     result_sys = db.execute(sql_statement)
     result = [dict(row) for row in result_sys]
 
-    coupons_usage_distribution = {}
-    return abort(501)  # for now
+    coupons_data_usage_distribution = dict()
+    coupons_date_usage_distribution = dict()
+    for i in result:
+        data = i.get('coupondata')
+        date = i.get('dateused')
+        if data in coupons_data_usage_distribution:
+            coupons_data_usage_distribution[data] += 1
+        else:
+            coupons_data_usage_distribution[data] = 1
+
+        if date in coupons_date_usage_distribution:
+            coupons_date_usage_distribution[date] += 1
+        else:
+            coupons_date_usage_distribution[date] = 1
+
+    stat = [coupons_data_usage_distribution, coupons_date_usage_distribution]
+    return str(stat)
