@@ -1,0 +1,33 @@
+.search-input-text {
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.search-input-number {
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.action-form {
+    position: fixed;
+    bottom: 50%;
+    right: 0;
+    margin-right: 20px;
+    padding: 5px 20px;
+    border: 2px solid grey;
+}
+
+.action-button {
+    display: block;
+    margin: 5px 0;
+    background-color: darkgrey; /* Green */
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    font-size: 16px;
+    width: 100%;
+}
+
+.action-form-label {
+    font-size: 20px;
+}

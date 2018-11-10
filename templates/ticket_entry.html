@@ -1,3 +1,7 @@
+<link rel="stylesheet" type="text/css"
+      href="{{ url_for('static', filename='css/ticket_entry.css') }}"/>
+
+
 {% if entry.openedforselling and not entry.issold %}
     <table class="ticket-opened-not-sold" id = {{ entry.id }}>
 {% endif %}

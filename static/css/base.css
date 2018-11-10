@@ -1,0 +1,46 @@
+.system_global_caption {
+    background-color: #777;
+    padding: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+}
+
+.narrow-body {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.content_caption {
+    padding-bottom: 5px;
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid black;
+}
+
+.nav {
+    box-sizing: border-box;
+    float: left;
+    width: 20%;
+    padding: 10px;
+}
+
+.content {
+    box-sizing: border-box;
+    float: left;
+    padding: 20px;
+    width: 80%;
+    border-left: 1px solid black;
+}
+
+.above-content {
+    padding-bottom: 5px;
+}
+
+/* Style the list inside the menu */
+.nav ul {
+    list-style-type: none;
+    padding: 0;
+}

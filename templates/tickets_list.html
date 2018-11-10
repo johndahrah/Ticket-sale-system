@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    Список билетов
+{% block script %}
+    <script src="{{ url_for('static', filename='js/tickets_list.js')}}"></script>
 {% endblock %}
 
-{% block script %}
-<script src="{{ url_for('static', filename='js/tickets_list.js')}}"></script>
+{% block stylesheet %}
+<link rel="stylesheet" type="text/css"
+      href="{{ url_for('static', filename='css/tickets_list.css') }}"/>
+{% endblock %}
+
+{% block title %}
+    Список билетов
 {% endblock %}
 
 {% block content_caption %}
@@ -33,7 +38,7 @@
         {% include 'ticket_entry.html' %}
     {% endfor %}
 
-    <form class="action-form">
+    <form class="acion-form">
         <div class="action-form-label">Доступные действия:</div>
         <button type="button" class="action-button" onclick="sellTickets()">Продать</button>
         <button type="button" class="action-button">Удалить</button>

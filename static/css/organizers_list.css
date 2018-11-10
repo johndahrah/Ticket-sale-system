@@ -1,0 +1,9 @@
+.entry {
+    border: 2px solid black;
+    margin-bottom: 30px;
+}
+
+table.entries-list {
+    width: 100%;
+    text-align: left;
+}
