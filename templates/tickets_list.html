@@ -18,15 +18,15 @@
 {% endblock %}
 
 {% block above_content %}
-    <form onsubmit="disableEmptyInputs(this)"
+    <form onsubmit="validate_search_data(this)"
           action="{{ url_for('tickets_handler.ticket_view_specific') }}" method="get">
         <label>
             Название: <input type="text" name="eventname" class="search-input-text"/> <br>
-            Дата: <input type="text" name="eventdate" class="search-input-text"/>
+            Дата: <input type="date" name="eventdate" class="search-input-text"/>
             Время: <input type="text" name="eventtime" class="search-input-text"/>
             Место: <input type="text" name="eventplace" class="search-input-text"/> <br>
-            Цена: <input type="text" name="sellprice" class="search-input-number"/>
-            id организатора: <input type="text" name="organizerid" class="search-input-number"/> <br>
+            Цена: <input type="number" name="sellprice" class="search-input-number"/>
+            id организатора: <input type="number" name="organizerid" class="search-input-number"/> <br>
             Серийный номер: <input type="text" name="serialnumber" class="search-input-text"/> <br>
         </label>
         <button type="submit"><b>Поиск</b></button>

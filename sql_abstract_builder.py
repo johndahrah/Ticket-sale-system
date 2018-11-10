@@ -30,7 +30,25 @@ def build_select_with_multiple_conditions(
         argument = arguments.get(key)
         if argument is not None:
             at_least_one_argument = True
-            equal_operator = '=' if argument.isdigit() else 'LIKE'
+
+            if argument.count('-') == 2:
+                # trick to handle another date format correctly,
+                # i.e. transpose YYYY-MM-DD to DD-MM-YYYY
+                buf = argument.split('-')
+                buf.reverse()
+                argument = '.'.join(buf)
+
+            # depending on the argument type
+            # we should select an equal operator for sql statement
+            # and decide whether to wrap it by using ' or not
+            if argument.isdigit():
+                equal_operator = '='
+            else:
+                equal_operator = 'LIKE'
+                if argument[0] != '\'' and argument[0] != '\"':
+                    # the argument could possibly be already wrapped,
+                    # but as we are here, it is not
+                    argument = '\'' + argument + '\''
             if multiple_parameters:
                 sql_statement += ' AND '
             sql_statement += f'{key} {equal_operator} {argument}'
