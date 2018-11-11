@@ -2,6 +2,7 @@ import re
 
 from flask import Flask
 from sqlalchemy import *
+import os
 
 import databaseProvider
 import generate_test_db_data
@@ -12,7 +13,12 @@ from handlers.TicketsHandler import tickets_handler
 from handlers.UsersHandler import users_handler
 
 app = Flask(__name__)
-db = databaseProvider.connect_to_db()
+try:
+    URL = os.environ['DATABASE_URL']
+except KeyError:
+    URL = None
+db = databaseProvider.connect_to_db(URL)
+
 
 app.register_blueprint(tickets_handler)
 app.register_blueprint(users_handler)

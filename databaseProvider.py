@@ -1,7 +1,10 @@
 from sqlalchemy import create_engine
 
 
-def connect_to_db():
+def connect_to_db(url=None):
+    if url is not None:
+        return create_engine(url)
+
     data = {
         'user': 'postgres',
         'pw': '1234',
