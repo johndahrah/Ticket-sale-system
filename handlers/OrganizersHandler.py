@@ -1,13 +1,14 @@
 from flask import request, Blueprint, jsonify, render_template
 from sqlalchemy import engine, exc
 
+import databaseProvider
 import json_text_constants as j_const
 import sql_abstract_builder as sql_bld
-from app import db
 
 organizers_handler = Blueprint(
     'organizers_handler', __name__, url_prefix='/api/organizer'
     )
+db = databaseProvider.connect_to_db()
 
 
 @organizers_handler.route('/view/all')

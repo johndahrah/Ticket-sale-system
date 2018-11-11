@@ -4,14 +4,15 @@ from flask import request, Blueprint, render_template
 from sqlalchemy.engine import ResultProxy
 from sqlalchemy.exc import DataError
 
+import databaseProvider
 import json_text_constants as j_const
-from app import db
 import sql_abstract_builder as sql_bld
 from handlers import CouponsHandler
 
 tickets_handler = Blueprint(
     'tickets_handler', __name__, url_prefix='/api/ticket'
     )
+db = databaseProvider.connect_to_db()
 
 
 @tickets_handler.route('/view/all', methods=['GET'])

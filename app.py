@@ -3,33 +3,22 @@ import re
 from flask import Flask
 from sqlalchemy import *
 
+import databaseProvider
 import generate_test_db_data
-
-app = Flask(__name__)
-
-POSTGRES = {
-    'user': 'postgres',
-    'pw': '1234',
-    'db': 'postgres',
-    'host': 'localhost',
-    'port': '5432',
-}
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = create_engine(
-    'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-    )
-
-
+from StatisticsGenerator import statistics_generator
+from handlers.CouponsHandler import coupons_handler
+from handlers.OrganizersHandler import organizers_handler
 from handlers.TicketsHandler import tickets_handler
 from handlers.UsersHandler import users_handler
-from handlers.OrganizersHandler import organizers_handler
-from handlers.CouponsHandler import coupons_handler
-import StatisticsGenerator
+
+app = Flask(__name__)
+db = databaseProvider.connect_to_db()
+
 app.register_blueprint(tickets_handler)
 app.register_blueprint(users_handler)
 app.register_blueprint(organizers_handler)
 app.register_blueprint(coupons_handler)
-app.register_blueprint(StatisticsGenerator.statistics_generator)
+app.register_blueprint(statistics_generator)
 
 
 @app.route('/')

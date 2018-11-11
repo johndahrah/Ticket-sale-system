@@ -1,11 +1,12 @@
 from flask import Blueprint
 from sqlalchemy import exc
 
-from app import db
+import databaseProvider
 
 statistics_generator = Blueprint(
     'statistics_generator', __name__, url_prefix='/api/stat'
     )
+db = databaseProvider.connect_to_db()
 
 
 @statistics_generator.route('/tickets')

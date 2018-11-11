@@ -1,12 +1,13 @@
 from flask import request, Blueprint
 
+import databaseProvider
 import json_text_constants as j_const
-from app import db
 import sql_abstract_builder as sql_bld
 
 users_handler = Blueprint(
     'users_handler', __name__, url_prefix='/api/user'
     )
+db = databaseProvider.connect_to_db()
 
 
 @users_handler.route('/add', methods=['POST'])

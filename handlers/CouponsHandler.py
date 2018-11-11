@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template, abort
 from sqlalchemy import exc
 
-from app import db
+import databaseProvider
 
 coupons_handler = Blueprint (
     'coupons_handler', __name__, url_prefix='/api/coupon'
     )
+db = databaseProvider.connect_to_db()
 
 
 @coupons_handler.route('/view/all')
