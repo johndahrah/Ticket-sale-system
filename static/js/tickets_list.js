@@ -4,7 +4,15 @@ function validate_search_data(form) {
     const controls = form.elements;
     for (let i=0; i<controls.length; i++) {
         controls[i].disabled = controls[i].value === '';
+        if (!isNaN(controls[i].value)
+            && controls[i].value !== ''
+            && controls[i].type === 'text') {
+            // todo: replace alert() to {error message} block
+            alert('Проверьте введенные данные');
+            return false;
+        }
     }
+    return true;
 }
 
 function sellTickets() {

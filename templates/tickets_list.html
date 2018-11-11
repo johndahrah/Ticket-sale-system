@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block above_content %}
-    <form onsubmit="validate_search_data(this)"
+    <form onsubmit="return validate_search_data(this)"
           action="{{ url_for('tickets_handler.ticket_view_specific') }}" method="get">
         <label>
             Название: <input type="text" name="eventname" class="search-input-text"/> <br>
@@ -46,4 +46,10 @@
     {% for entry in attributes %}
         {% include 'ticket_entry.html' %}
     {% endfor %}
+{% endblock %}
+
+{% block error_message %}
+    <div class="{{ 'error-message' if error is defined else 'error-message-hidden' }}">
+        {{ error }}
+    </div>
 {% endblock %}

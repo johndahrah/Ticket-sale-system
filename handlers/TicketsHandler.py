@@ -39,7 +39,10 @@ def ticket_view_specific():
         result = [dict(row) for row in result_sys]
         return render_template('tickets_list.html', attributes=result)
     else:
-        return 'no one correct json key found'
+        return render_template(
+            'tickets_list.html',
+            error='Ошибка при выполнении запроса'
+            )
 
 
 @tickets_handler.route('/view/<ticket_id>')

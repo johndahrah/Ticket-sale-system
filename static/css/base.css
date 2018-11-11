@@ -42,7 +42,6 @@
 .above-content-sticky {
     background: #ffffff;
     /*line-height: 12px;*/
-    margin-top: 10px;
     font-size: 30px;
     position: sticky;
     top: 0;
@@ -53,4 +52,18 @@
 .nav ul {
     list-style-type: none;
     padding: 0;
+}
+
+.error-message {
+    background-color: darkred;
+    color: white;
+    font-size: 18px;
+    position: sticky;
+    bottom: 0;
+    padding: 10px 10px;
+    text-align: center;
+}
+
+.error-message-hidden{
+    display: none;
 }
