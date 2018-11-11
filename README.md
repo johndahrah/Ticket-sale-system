@@ -2,10 +2,13 @@ Ticket sale system
 ---
 University course work for a "Data management" subject.
 
-The structure of the app is as follows: client <--> server <--> database.
+####App is running on Heroku:
+
+https://ticket-sale-system.herokuapp.com/api/ticket/view
 
 Instruments:
 * Flask
 * PostgreSQL
 * Sqlalchemy
 * Jijna2
+* Heroku
