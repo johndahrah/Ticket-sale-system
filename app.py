@@ -13,11 +13,7 @@ from handlers.TicketsHandler import tickets_handler
 from handlers.UsersHandler import users_handler
 
 app = Flask(__name__)
-try:
-    URL = os.environ['DATABASE_URL']
-except KeyError:
-    URL = None
-db = databaseProvider.connect_to_db(URL)
+db = databaseProvider.connect_to_db()
 
 
 app.register_blueprint(tickets_handler)

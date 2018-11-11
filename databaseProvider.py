@@ -1,7 +1,13 @@
 from sqlalchemy import create_engine
+import os
 
 
-def connect_to_db(url=None):
+def connect_to_db():
+    try:
+        url = os.environ['DATABASE_URL']
+    except KeyError:
+        url = None
+
     if url is not None:
         return create_engine(url)
 
