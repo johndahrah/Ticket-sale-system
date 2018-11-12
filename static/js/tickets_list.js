@@ -16,7 +16,23 @@ function validate_search_data(form) {
 }
 
 function sellTickets() {
-    
+    let xhr = new XMLHttpRequest();
+    let selling;
+    if (selected_tickets.length === 1) {
+        selling = selected_tickets[0];
+    } else {
+        selling = selected_tickets;
+    }
+
+    let json = JSON.stringify({
+        "selling": selling,
+        "userid": 1,
+        "coupon": "7sample"
+    });
+    xhr.open("POST", '/api/ticket/sell', true);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.send(json);
+    window.location.reload(true);
 }
 
 function selectTickets(table) {

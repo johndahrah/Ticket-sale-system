@@ -18,7 +18,7 @@ db = databaseProvider.connect_to_db()
 @tickets_handler.route('/view/all', methods=['GET'])
 def ticket_view_all():
     result_sys = db.execute(
-        'SELECT * FROM tickets'
+        'SELECT * FROM tickets ORDER BY id'
         )
     result = [dict(row) for row in result_sys]
     return render_template('tickets_list.html', attributes=result)
@@ -125,10 +125,12 @@ def ticket_sell():
     # in case of one ticket, we operate with it as an "int"
     # in case of many tickets, we operate with them as a "tuple"
     tickets_ids = json.get(j_const.sell_tickets_id)
-    if type(tickets_ids) is int:
-        tickets_id = tickets_ids
+    print(tickets_ids, type(tickets_ids))
+    if type(tickets_ids) is str:
+        tickets_id = int(tickets_ids)
     else:
-        tickets_id = tuple(json.get(j_const.sell_tickets_id))
+        tickets_id = tuple(tickets_ids)
+    print(tickets_id)
 
     # checking request data validity. todo: replace return 'str' with abort(400)
     if at_least_one_ticket_is_already_sold(tickets_id):
@@ -150,7 +152,7 @@ def ticket_sell():
         db.execute(sql_statement)
 
     # mark necessary tickets as "sold"
-    equal_operator = '=' if type(tickets_ids) is int else 'IN'
+    equal_operator = '=' if type(tickets_ids) is str else 'IN'
     sql_statement = f'UPDATE tickets ' \
                     f'SET issold = {True} ' \
                     f'WHERE id {equal_operator} {tickets_id}'
@@ -173,7 +175,7 @@ def ticket_sell():
         table='checks',
         column_names=('TicketsAmount', 'TotalPrice',
                       'CouponUsed', 'CouponID', 'WorkerID'),
-        values=(1 if type(tickets_ids) is int else len(tickets_id),
+        values=(1 if type(tickets_ids) is str else len(tickets_id),
                 total_price, coupon_data is not None,
                 "null" if coupon_id is None else coupon_id,
                 worker_id),
@@ -195,7 +197,7 @@ def ticket_sell():
             values=(check_id, tickets_id)
             )
         db.execute(sql_statement)
-    return 'ok'
+    return ticket_view_all()
 
 
 def receive_sql_query_result(sql_statement):
