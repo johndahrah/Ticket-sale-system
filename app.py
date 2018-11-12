@@ -1,6 +1,6 @@
 import re
 
-from flask import Flask
+from flask import Flask, redirect, url_for, render_template
 from sqlalchemy import *
 import os
 
@@ -24,9 +24,8 @@ app.register_blueprint(statistics_generator)
 
 
 @app.route('/')
-def test():
-    # return render_template('organizers_list.html')
-    return 'ok'
+def init():
+    return render_template('index.html')
 
 
 @app.route('/api/system/db/init_tables')
@@ -67,10 +66,15 @@ def send_favicon():
     return ''
 
 
-drop_all_tables()
-initialize_all_tables()
-generate_test_db_data.generate(db, clear_existing=true)
+@app.route('/api/system/revert')
+def revert():
+    drop_all_tables()
+    initialize_all_tables()
+    generate_test_db_data.generate(db, clear_existing=true)
+    return render_template('index.html')
+
 
 if __name__ == '__main__':
+    revert()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
