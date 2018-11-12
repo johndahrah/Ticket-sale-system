@@ -68,13 +68,17 @@ def send_favicon():
 
 @app.route('/api/system/revert')
 def revert():
-    drop_all_tables()
-    initialize_all_tables()
-    generate_test_db_data.generate(db, clear_existing=true)
+    rebuild_tables()
     return render_template('index.html')
 
 
+def rebuild_tables():
+    drop_all_tables()
+    initialize_all_tables()
+    generate_test_db_data.generate(db, clear_existing=true)
+
+
 if __name__ == '__main__':
-    revert()
+    rebuild_tables()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
