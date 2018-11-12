@@ -49,7 +49,8 @@
 {% endblock %}
 
 {% block error_message %}
-    <div class="{{ 'error-message' if error is defined else 'error-message-hidden' }}">
+    <div id="error-box" class="{{ 'error-message' if error is defined else 'error-message-hidden' }}">
+        {# if error is defined, than we should handle a server error message #}
         {{ error }}
     </div>
 {% endblock %}

@@ -57,11 +57,13 @@
 .error-message {
     background-color: darkred;
     color: white;
-    font-size: 18px;
+    font-size: 20px;
     position: sticky;
     bottom: 0;
     padding: 10px 10px;
     text-align: center;
+    display: inline-block;
+    width: 100%;
 }
 
 .error-message-hidden{

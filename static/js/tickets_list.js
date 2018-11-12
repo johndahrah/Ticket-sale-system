@@ -1,5 +1,7 @@
 let selected_tickets = [];
 
+let errorBox = document.getElementById('error-box');
+
 function validate_search_data(form) {
     const controls = form.elements;
     for (let i=0; i<controls.length; i++) {
@@ -7,8 +9,7 @@ function validate_search_data(form) {
         if (!isNaN(controls[i].value)
             && controls[i].value !== ''
             && controls[i].type === 'text') {
-            // todo: replace alert() to {error message} block
-            alert('Проверьте введенные данные');
+            showError('Введенные данные имеют неверный формат');
             return false;
         }
     }
@@ -17,6 +18,21 @@ function validate_search_data(form) {
 
 function sellTickets() {
     let xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            let response = xhr.responseText;
+            console.log(response);
+            if (response.length !== 0) {
+                showError(response)
+                // may be a good idea to deselect tickets in case of error
+            } else {
+                errorBox.classList.toggle('error-message-hidden');
+                window.location.reload(false)
+            }
+        }
+    };
+
     let selling;
     if (selected_tickets.length === 1) {
         selling = selected_tickets[0];
@@ -24,6 +40,7 @@ function sellTickets() {
         selling = selected_tickets;
     }
 
+    // just for testing
     let json = JSON.stringify({
         "selling": selling,
         "userid": 1,
@@ -32,7 +49,6 @@ function sellTickets() {
     xhr.open("POST", '/api/ticket/sell', true);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.send(json);
-    window.location.reload(true);
 }
 
 function selectTickets(table) {
@@ -56,4 +72,9 @@ function arrayRemove(arr, value) {
    return arr.filter(function(elem){
        return elem !== value;
    });
+}
+
+function showError(text) {
+    errorBox.className = 'error-message';
+    errorBox.innerText = text;
 }

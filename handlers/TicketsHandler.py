@@ -75,12 +75,12 @@ def ticket_add():
                     str(i[j_const.serial]), False, str(i[j_const.event_name]))
             )
     except KeyError as e:
-        return f'invalid json key has been received, check: {e}'
+        return f'Был получен невеный кллюч!'
     try:
         db.execute(sql_statement)
     except DataError as e:
-        return f'invalid type! Details: {e}'
-    return 'successful'
+        return f'Неверный тип данных'
+    return ''
 
 
 def at_least_one_ticket_is_already_sold(tickets_id):
@@ -125,22 +125,20 @@ def ticket_sell():
     # in case of one ticket, we operate with it as an "int"
     # in case of many tickets, we operate with them as a "tuple"
     tickets_ids = json.get(j_const.sell_tickets_id)
-    print(tickets_ids, type(tickets_ids))
     if type(tickets_ids) is str:
         tickets_id = int(tickets_ids)
     else:
         tickets_id = tuple(tickets_ids)
-    print(tickets_id)
 
     # checking request data validity. todo: replace return 'str' with abort(400)
     if at_least_one_ticket_is_already_sold(tickets_id):
-        return 'One or more chosen tickets are already sold'
+        return 'Один (или более) билетов уже проданы'
 
     if at_least_one_ticket_is_closed_for_sale(tickets_id):
-        return 'One or more chosen tickets are closed for sale'
+        return 'Один (или более) билетов закрыты для продажи'
 
     if coupon_data is not None and not CouponsHandler.is_valid(coupon_data):
-        return 'coupon is not valid'
+        return 'Купон имеет неверный формат'
 
     # insert the possible coupon data into the database
     if coupon_data is not None:
@@ -197,7 +195,7 @@ def ticket_sell():
             values=(check_id, tickets_id)
             )
         db.execute(sql_statement)
-    return ticket_view_all()
+    return ''
 
 
 def receive_sql_query_result(sql_statement):
@@ -230,7 +228,7 @@ def ticket_modify(ticket_id):
 
     json_dict = dict(request.get_json())
     if json_dict.get('id') is not None:
-        return 'you can not modify ticket\'s ID'
+        return 'Вы не можете изменять ID билета'
 
     more_than_one_argument = False
     for i in j_const.all_ticket_properties:
@@ -242,7 +240,7 @@ def ticket_modify(ticket_id):
             more_than_one_argument = True
     sql_statement += f'WHERE id = {ticket_id}'
     db.execute(sql_statement)
-    return 'ok'
+    return ''
 
 
 @tickets_handler.route('/delete/<ticket_id>', methods=['POST'])
@@ -252,7 +250,7 @@ def ticket_delete(ticket_id):
     sql_statement = f'DELETE FROM tickets ' \
                     f'WHERE id = {ticket_id}'
     db.execute(sql_statement)
-    return 'ok'
+    return ''
 
 
 def ticket_id_exists(ticket_id):
