@@ -35,3 +35,18 @@ td, th {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+.tooltip span{
+	display: none;
+	padding: 2px 2px;
+	margin-left: 100px;
+    margin-top: -50px;
+	width: 150px;
+}
+
+.tooltip:hover span{
+	display: inline;
+	position: absolute;
+	border: 1px solid lightgray;
+    color: #777777;
+}
