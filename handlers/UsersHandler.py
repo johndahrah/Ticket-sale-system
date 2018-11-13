@@ -1,4 +1,4 @@
-from flask import request, Blueprint
+from flask import request, Blueprint, render_template, redirect, url_for
 
 import databaseProvider
 import json_text_constants as j_const
@@ -15,12 +15,6 @@ def user_add():
     content = dict(request.get_json())
     username, password, level = get_user_data(content)
 
-    # db.execute(
-    #     "INSERT INTO Users "
-    #     "(login, password, accessLevel) "
-    #     "VALUES (\'%s\', \'%s\', %s);"
-    #     % (username, password, level)
-    #     )
     sql_statement = sql_bld.build_insert_of_single_entry(
         table='users',
         column_names=('login', 'password', 'accessLevel'),
@@ -63,3 +57,36 @@ def get_user_data(content):
     password = content.get(j_const.password)
     level = content.get(j_const.level)
     return username, password, level
+
+
+@users_handler.route('/api/users/login')
+def login():
+    if request.args.get('asGuest') is not None:
+        return redirect(url_for('tickets_handler.ticket_view_specific'))
+
+    username = request.args.get('username')
+    password = request.args.get('password')
+    sql_statement = f'SELECT * FROM users ' \
+                    f'WHERE login LIKE \'{username}\' ' \
+                    f'AND password LIKE \'{password}\''
+    if receive_sql_query_result(sql_statement) is not None:
+        return redirect(url_for('tickets_handler.ticket_view_specific'))
+    else:
+        return render_template('start_page.html',
+                               error='Неверное имя пользователя или пароль ')
+
+
+def receive_sql_query_result(sql_statement):
+    """
+    works only for receiving a single variable.
+    """
+    sql_sum_result = db.execute(sql_statement)
+    result = []
+    for row in sql_sum_result:
+        result.append(row)
+
+    try:
+        data = result[0]._row[0]
+    except IndexError:
+        return None
+    return data

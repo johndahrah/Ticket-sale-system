@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html>
 
-<link rel="stylesheet" type="text/css"
-      href="{{ url_for('static', filename='css/start_page.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/start_page.css') }}"/>
 
 <script src="{{ url_for('static', filename='js/start_page.js')}}"></script>
 
 <body>
-    <form onsubmit="login(this)" class="parent">
-        <input type="text" id="user" placeholder="Имя пользователя" class="input"/> <br>
-        <input type="password" id="password" placeholder="Пароль" class="input"/>
+    <form class="parent" action="{{ url_for('users_handler.login') }}" method="get">
+        <input type="text" name="username" id="username" placeholder="Имя пользователя" class="input"/> <br>
+        <input type="password" name="password" id="password" placeholder="Пароль" class="input"/>
         <div class="buttons">
-            <button class="button">Войти</button>
-            <button class="button">Войти как гость</button>
-
+            <button class="button" type="submit">Войти</button>
+            <div class="guest">
+                Войти как гость
+                <input type="checkbox" name="asGuest" onchange="changeCheckboxState()">
+            </div>
         </div>
+
+        <div id="error-box" class="{{ 'error-message' if error is defined else 'error-message-hidden' }}">
+        {{ error }}
+        </div>
+
     </form>
 </body>
-
 </html>
 

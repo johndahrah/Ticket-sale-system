@@ -11,10 +11,14 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-wrap: wrap;
+    width: 20%;
+    justify-content: center;
 }
 
 .input {
-    margin: 10px 0;
     font-size: 15px;
     background-color: lightgray;
     border: 2px solid black;
@@ -25,6 +29,7 @@
 
 body {
     background-color: darkgrey;
+    font-family: arial,sans-serif;
 }
 
 ::placeholder {
@@ -32,7 +37,10 @@ body {
 }
 
 .buttons {
-    margin: 0 -10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .button {
@@ -41,11 +49,30 @@ body {
     border-radius: 2px;
     color: #757575;
     cursor: default;
-    font-family: arial,sans-serif;
     font-size: 13px;
     font-weight: bold;
     margin: 11px 4px;
     min-width: 54px;
     padding: 3px 16px;
     text-align: center;
+}
+
+.guest {
+    font-size: small;
+}
+
+.error-message {
+    background-color: darkred;
+    color: white;
+    font-size: 20px;
+    position: sticky;
+    bottom: 0;
+    padding: 10px 10px;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}
+
+.error-message-hidden{
+    visibility: hidden;
 }
