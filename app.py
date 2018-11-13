@@ -25,7 +25,7 @@ app.register_blueprint(statistics_generator)
 
 @app.route('/')
 def init():
-    return render_template('index.html')
+    return render_template('start_page.html')
 
 
 @app.route('/api/system/db/init_tables')
@@ -69,7 +69,7 @@ def send_favicon():
 @app.route('/api/system/revert')
 def revert():
     rebuild_tables()
-    return render_template('index.html')
+    return render_template('start_page.html')
 
 
 def rebuild_tables():

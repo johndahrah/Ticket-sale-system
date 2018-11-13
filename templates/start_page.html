@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" type="text/css"
+      href="{{ url_for('static', filename='css/start_page.css') }}"/>
+
+<script src="{{ url_for('static', filename='js/start_page.js')}}"></script>
+
+<body>
+    <form onsubmit="login(this)" class="parent">
+        <input type="text" id="user" placeholder="Имя пользователя" class="input"/> <br>
+        <input type="password" id="password" placeholder="Пароль" class="input"/>
+        <div class="buttons">
+            <button class="button">Войти</button>
+            <button class="button">Войти как гость</button>
+
+        </div>
+    </form>
+</body>
+
+</html>
+
