@@ -11,10 +11,11 @@
     border: 1px solid black;
     margin-bottom: 20px;
     width: 100%;
-    background: lightcoral linear-gradient(
-            to left bottom, transparent calc(50% - 1px), black,
-            transparent calc(50% + 1px)
-    );
+    /*background: lightcoral linear-gradient(*/
+            /*to left bottom, transparent calc(50% - 1px), black,*/
+            /*transparent calc(50% + 1px)*/
+    /*);*/
+    background: lightcoral;
 }
 
 .ticket-not-opened {
