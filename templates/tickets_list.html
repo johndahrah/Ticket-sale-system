@@ -18,16 +18,16 @@
 {% endblock %}
 
 {% block above_content %}
-    <form onsubmit="return validate_search_data(this)"
+    <form onsubmit="return validate_search_data(this)" class="search-form"
           action="{{ url_for('tickets_handler.ticket_view_specific') }}" method="get">
         <label>
-            Название: <input type="text" name="eventname" class="search-input-text"/> <br>
-            Дата: <input type="date" name="eventdate" class="search-input-text"/>
-            Время: <input type="text" name="eventtime" class="search-input-text"/>
-            Место: <input type="text" name="eventplace" class="search-input-text"/> <br>
-            Цена: <input type="number" name="sellprice" class="search-input-number"/>
-            id организатора: <input type="number" name="organizerid" class="search-input-number"/> <br>
-            Серийный номер: <input type="text" name="serialnumber" class="search-input-text"/> <br>
+            <input placeholder="Название" type="text" name="eventname" class="search-input-text"/>
+            <input placeholder="Дата" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" name="eventdate" class="search-input-text"/>
+            <input placeholder="Время" type="text" name="eventtime" class="search-input-text"/>
+            <input placeholder="Место" type="text" name="eventplace" class="search-input-text"/>
+            <input placeholder="Цена" type="number" name="sellprice" class="search-input-number"/>
+            <input placeholder="ID организатора" type="number" name="organizerid" class="search-input-number"/>
+            <input placeholder="Серийный номер" type="text" name="serialnumber" class="search-input-text"/>
         </label>
         <button type="submit" class="search-button"><b>Поиск</b></button>
     </form>

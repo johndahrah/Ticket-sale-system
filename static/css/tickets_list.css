@@ -3,6 +3,7 @@
     margin-right: 10px;
     background: lightgray;
     border: 1px solid darkgrey;
+    height: 20px;
 }
 
 .search-input-number {
@@ -10,6 +11,7 @@
     margin-right: 10px;
     background: lightgray;
     border: 1px solid darkgrey;
+    height: 20px;
 }
 
 .action-form {
@@ -37,4 +39,14 @@
 
 .search-button {
     background: lightgray;
+    height: 20px;
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    justify-content: center;
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
 }
