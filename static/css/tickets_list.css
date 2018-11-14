@@ -1,17 +1,22 @@
 .search-input-text {
     margin-bottom: 5px;
     margin-right: 10px;
+    background: lightgray;
+    border: 1px solid darkgrey;
 }
 
 .search-input-number {
     margin-bottom: 5px;
     margin-right: 10px;
+    background: lightgray;
+    border: 1px solid darkgrey;
 }
 
 .action-form {
     display: inline-block;
     text-align: center;
     width: 100%;
+    background-color: darkgrey;
 }
 
 .action-button {
@@ -23,8 +28,13 @@
     text-align: center;
     font-size: 16px;
     width: 30%;
+    border: 1px solid darkgrey;
 }
 
 .action-form-label {
     font-size: 20px;
+}
+
+.search-button {
+    background: lightgray;
 }

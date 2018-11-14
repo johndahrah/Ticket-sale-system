@@ -48,5 +48,6 @@ td, th {
 	display: inline;
 	position: absolute;
 	border: 1px solid lightgray;
-    color: #777777;
+    color: black;
+    background: lightgray;
 }

@@ -69,3 +69,7 @@
 .error-message-hidden{
     display: none;
 }
+
+body {
+    background-color: darkgrey;
+}
