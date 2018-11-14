@@ -1,0 +1,33 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ticket_new_entry.css') }}"/>
+
+
+<form action="{{ url_for('tickets_handler.ticket_add') }}" onsubmit="addTicket()">
+<table class="ticket">
+    <tr>
+        <th colspan=3>
+            <input placeholder="Название" type="text" name="eventname" class="input-new"/>
+            <input placeholder="ID организатора" type="number" name="organizerid" class="input-new"/>
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <input placeholder="Дата" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" name="eventdate" class="input-new"/><br>
+            <input placeholder="Время" type="text" name="eventtime" class="input-new"/>
+        </td>
+        <td>
+            <input placeholder="Цена" type="number" name="sellprice" class="input-new"/>
+        </td>
+        <td>
+            <input placeholder="Серийный номер" type="text" name="serialnumber" class="input-new"/>
+            <button type="submit">ОК</button>
+        </td>
+    </tr>
+
+{#    {% if entry.comment != "" %}#}
+{#        <tr>#}
+{#            <th colspan=3>{{ entry.comment }}</th>#}
+{#        </tr>#}
+{#    {% endif %}#}
+
+</table>
+</form>

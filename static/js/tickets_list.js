@@ -19,7 +19,7 @@ function validate_search_data(form) {
 function sellTickets() {
     let xhr = new XMLHttpRequest();
 
-    xhr.onreadystatechange = showPossibleError(xhr);
+    xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);
 
     let selling;
     if (selected_tickets.length === 1) {
@@ -57,15 +57,37 @@ function selectTickets(table) {
 }
 
 function deleteTickets() {
-    for (let i = 0; i < selected_tickets.length; i++) {
-        let xhr = new XMLHttpRequest();
+    if (confirm("Вы действительно хотите удалить билет(ы)?")) {
+        for (let i = 0; i < selected_tickets.length; i++) {
+            let xhr = new XMLHttpRequest();
 
-        xhr.onreadystatechange = showPossibleError(xhr);
+            xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);
 
-        xhr.open("GET", '/api/ticket/delete/' + selected_tickets[i], true);
-        xhr.setRequestHeader('Content-type', 'charset=utf-8');
-        xhr.send();
+            xhr.open("GET", '/api/ticket/delete/' + selected_tickets[i], true);
+            xhr.setRequestHeader('Content-type', 'charset=utf-8');
+            xhr.send();
+        }
     }
+}
+
+function alterTicket() {
+    if (selected_tickets.length !== 1) {
+        showError('Выделите только один билет, чтобы его изменить');
+    } else {
+        errorBox.classList.toggle('error-message-hidden');
+        // let xhr = new XMLHttpRequest();
+        //
+        // xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);
+        //
+        // xhr.open("GET", '/api/ticket/modify/' + selected_tickets[0], true);
+        // xhr.setRequestHeader('Content-type', 'charset=utf-8');
+        // xhr.send();
+    }
+}
+
+function addTicket() {
+    window.location.reload(false);
+
 }
 
 function arrayRemove(arr, value) {
@@ -79,7 +101,7 @@ function showError(text) {
     errorBox.innerText = text;
 }
 
-function showPossibleError(xhr) {
+function showPossibleErrorAndReloadIfSucces(xhr) {
     return function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             let response = xhr.responseText;

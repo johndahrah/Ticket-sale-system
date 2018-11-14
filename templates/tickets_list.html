@@ -38,11 +38,15 @@
 {#        <div class="action-form-label">Доступные действия:</div>#}
         <button type="button" class="action-button" onclick="sellTickets()">Продать</button>
         <button type="button" class="action-button" onclick="deleteTickets()">Удалить</button>
-        <button type="button" class="action-button">Изменить</button>
+        <button type="button" class="action-button" onclick="alterTicket()">Изменить</button>
+        <button type="button" class="action-button">Добавить</button>
     </form>
 {% endblock %}
 
 {% block content %}
+
+    {% include 'ticket_new_entry.html' %}
+
     {% for entry in attributes %}
         {% include 'ticket_entry.html' %}
     {% endfor %}

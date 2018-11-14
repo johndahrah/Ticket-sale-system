@@ -1,6 +1,6 @@
 import datetime
 
-from flask import request, Blueprint, render_template
+from flask import request, Blueprint, render_template, redirect, url_for
 from sqlalchemy.engine import ResultProxy
 from sqlalchemy.exc import DataError
 
@@ -55,12 +55,22 @@ def ticket_view_by_id(ticket_id):
     return render_template('tickets_list.html', attributes=result)
 
 
-@tickets_handler.route('/add', methods=['POST'])
+@tickets_handler.route('/add', methods=['GET'])
 def ticket_add():
     """
     required json: see column_names below
     """
-    i = dict(request.get_json())
+    i = request.args
+
+    sql_statement = f'SELECT name FROM organizers ' \
+                    f'WHERE id = {int(i.get(j_const.organizerid))}'
+    org_name = receive_sql_query_result(sql_statement)
+
+    sql_statement = f'SELECT address FROM organizers ' \
+                    f'WHERE id = {int(i.get(j_const.organizerid))}'
+    address = receive_sql_query_result(sql_statement)
+
+
     try:
         sql_statement = sql_bld.build_insert_of_single_entry(
             table='tickets',
@@ -68,11 +78,13 @@ def ticket_add():
                           'eventPlace', 'eventOrganizerName', 'sellPrice',
                           'comment', 'organizerID', 'serialNumber', 'isSold',
                           'eventName'),
-            values=(i[j_const.opened], str(i[j_const.date]),
-                    str(i[j_const.time]), str(i[j_const.place]),
-                    str(i[j_const.organizer]), i[j_const.price],
-                    str(i[j_const.comment]), str(i[j_const.organizerid]),
-                    str(i[j_const.serial]), False, str(i[j_const.event_name]))
+            values=(False, str(i.get(j_const.date)),
+                    str(i.get(j_const.time)), str(address),
+                    str(org_name), i.get(j_const.price),
+                    "",
+                    str(i.get(j_const.organizerid)),
+                    str(i.get(j_const.serial)), False,
+                    str(i.get(j_const.event_name)))
             )
     except KeyError as e:
         return f'Был получен невеный кллюч!'
@@ -80,7 +92,7 @@ def ticket_add():
         db.execute(sql_statement)
     except DataError as e:
         return f'Неверный тип данных'
-    return ''
+    return redirect(url_for('tickets_handler.ticket_view_specific'))
 
 
 def at_least_one_ticket_is_already_sold(tickets_id):
