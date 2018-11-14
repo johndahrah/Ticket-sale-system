@@ -19,19 +19,7 @@ function validate_search_data(form) {
 function sellTickets() {
     let xhr = new XMLHttpRequest();
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            let response = xhr.responseText;
-            console.log(response);
-            if (response.length !== 0) {
-                showError(response)
-                // may be a good idea to deselect tickets in case of error
-            } else {
-                errorBox.classList.toggle('error-message-hidden');
-                window.location.reload(false)
-            }
-        }
-    };
+    xhr.onreadystatechange = showPossibleError(xhr);
 
     let selling;
     if (selected_tickets.length === 1) {
@@ -68,6 +56,18 @@ function selectTickets(table) {
     console.log(selected_tickets)
 }
 
+function deleteTickets() {
+    for (let i = 0; i < selected_tickets.length; i++) {
+        let xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = showPossibleError(xhr);
+
+        xhr.open("GET", '/api/ticket/delete/' + selected_tickets[i], true);
+        xhr.setRequestHeader('Content-type', 'charset=utf-8');
+        xhr.send();
+    }
+}
+
 function arrayRemove(arr, value) {
    return arr.filter(function(elem){
        return elem !== value;
@@ -77,4 +77,19 @@ function arrayRemove(arr, value) {
 function showError(text) {
     errorBox.className = 'error-message';
     errorBox.innerText = text;
+}
+
+function showPossibleError(xhr) {
+    return function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            let response = xhr.responseText;
+            console.log(response);
+            if (response.length !== 0) {
+                showError(response)
+            } else {
+                errorBox.classList.toggle('error-message-hidden');
+                window.location.reload(false)
+            }
+        }
+    };
 }

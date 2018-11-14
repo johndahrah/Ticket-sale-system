@@ -243,7 +243,7 @@ def ticket_modify(ticket_id):
     return ''
 
 
-@tickets_handler.route('/delete/<ticket_id>', methods=['POST'])
+@tickets_handler.route('/delete/<ticket_id>', methods=['GET'])
 def ticket_delete(ticket_id):
     if not ticket_id_exists(ticket_id):
         return 'the ticket with given ID does not exist'
