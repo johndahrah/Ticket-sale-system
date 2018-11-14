@@ -39,7 +39,7 @@
         <button type="button" class="action-button" onclick="sellTickets()">Продать</button>
         <button type="button" class="action-button" onclick="deleteTickets()">Удалить</button>
         <button type="button" class="action-button" onclick="alterTicket()">Изменить</button>
-        <button type="button" class="action-button">Добавить</button>
+        <button type="button" class="action-button" onclick="showNewEntryForm()">Добавить</button>
     </form>
 {% endblock %}
 
@@ -53,8 +53,14 @@
 {% endblock %}
 
 {% block error_message %}
-    <div id="error-box" class="{{ 'error-message' if error is defined else 'error-message-hidden' }}">
-        {# if error is defined, than we should handle a server error message #}
+    {% if error is defined and error != '' %}
+        <div id="error-box" class="error-message">
+    {% elif success_message is defined and success_message != '' %}
+        <div id="error-box" class="error-message-success">
+    {% else %}
+        <div id="error-box" class="error-message-hidden">
+    {% endif %}
         {{ error }}
+        {{ success_message }}
     </div>
 {% endblock %}

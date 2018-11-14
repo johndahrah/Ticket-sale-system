@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ticket_new_entry.css') }}"/>
 
 
-<form action="{{ url_for('tickets_handler.ticket_add') }}" onsubmit="addTicket()">
+<form id="new-ticket-form" class="form-hidden" action="{{ url_for('tickets_handler.ticket_add') }}" onsubmit="addTicket()">
 <table class="ticket">
     <tr>
         <th colspan=3>
@@ -23,11 +23,12 @@
         </td>
     </tr>
 
-{#    {% if entry.comment != "" %}#}
-{#        <tr>#}
-{#            <th colspan=3>{{ entry.comment }}</th>#}
-{#        </tr>#}
-{#    {% endif %}#}
+
+    <tr>
+        <th colspan=3>
+             <input placeholder="Комментарий" type="text" name="comment" class="input-new"/>
+        </th>
+    </tr>
 
 </table>
 </form>

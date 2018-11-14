@@ -85,9 +85,15 @@ function alterTicket() {
     }
 }
 
-function addTicket() {
-    window.location.reload(false);
+function showNewEntryForm() {
+    let newTicketForm = document.getElementById("new-ticket-form");
+    newTicketForm.className = newTicketForm.className === "form-visible"?
+        "form-hidden":"form-visible";
+    newTicketForm.scrollIntoView(false);
+}
 
+function addTicket() {
+    showSuccessMessage('Билет успешно добавлен');
 }
 
 function arrayRemove(arr, value) {
@@ -109,9 +115,19 @@ function showPossibleErrorAndReloadIfSucces(xhr) {
             if (response.length !== 0) {
                 showError(response)
             } else {
-                errorBox.classList.toggle('error-message-hidden');
+                // errorBox.classList.toggle('error-message-hidden');
                 window.location.reload(false)
             }
         }
     };
+}
+
+function showSuccessMessage(s) {
+    errorBox.className = 'error-message-success';
+    errorBox.innerText = s;
+}
+
+function sleepFor(sleepDuration ){
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
 }

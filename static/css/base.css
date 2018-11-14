@@ -66,6 +66,18 @@
     width: 100%;
 }
 
+.error-message-success {
+    background-color: darkgreen;
+    color: white;
+    font-size: 20px;
+    position: sticky;
+    bottom: 0;
+    padding: 10px 10px;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}
+
 .error-message-hidden{
     display: none;
 }
