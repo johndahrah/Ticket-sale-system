@@ -1,17 +1,13 @@
-<link rel="stylesheet" type="text/css"
-      href="{{ url_for('static', filename='css/ticket_entry.css') }}"/>
-
-
 {% if entry.openedforselling and not entry.issold %}
-    <table class="ticket-opened-not-sold tooltip" onclick="selectTickets(this)" id={{ entry.id }}>
+    <table class="ticket-opened-not-sold tooltip" ondblclick="selectTickets(this)" id={{ entry.id }}>
 {% endif %}
 
 {% if entry.openedforselling and entry.issold %}
-    <table class="ticket-opened-sold tooltip" onclick="selectTickets(this)" id={{ entry.id }}>
+    <table class="ticket-opened-sold tooltip" ondblclick="selectTickets(this)" id={{ entry.id }}>
 {% endif %}
 
 {% if not entry.openedforselling %}
-    <table class="ticket-not-opened tooltip" onclick="selectTickets(this)" id={{ entry.id }}>
+    <table class="ticket-not-opened tooltip" ondblclick="selectTickets(this)" id={{ entry.id }}>
 {% endif %}
 
     <tr>
@@ -23,7 +19,7 @@
     <tr>
         <td>Дата: {{ entry.eventdate }}<br>
             Время: {{ entry.eventtime }}</td>
-        <td>Цена: {{ entry.sellprice }}</td>
+        <td>Цена: <input id="sellprice" type="text" placeholder="{{ entry.sellprice }}" readonly="readonly" onkeydown="changeTicket(this)" onclick="makeFieldEditable(this)"></td>
         <td>
             {{ entry.serialnumber }}
 

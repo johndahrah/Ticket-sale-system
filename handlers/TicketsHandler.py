@@ -61,15 +61,21 @@ def ticket_add():
     required json: see column_names below
     """
     i = request.args
+    sql_statement = f'SELECT * FROM tickets'
+    result_sys = db.execute(sql_statement)
+    result = [dict(row) for row in result_sys]
+    try:
+        sql_statement = f'SELECT name FROM organizers ' \
+                        f'WHERE id = {int(i.get(j_const.organizerid))}'
+        org_name = receive_sql_query_result(sql_statement)
 
-    sql_statement = f'SELECT name FROM organizers ' \
-                    f'WHERE id = {int(i.get(j_const.organizerid))}'
-    org_name = receive_sql_query_result(sql_statement)
-
-    sql_statement = f'SELECT address FROM organizers ' \
-                    f'WHERE id = {int(i.get(j_const.organizerid))}'
-    address = receive_sql_query_result(sql_statement)
-
+        sql_statement = f'SELECT address FROM organizers ' \
+                        f'WHERE id = {int(i.get(j_const.organizerid))}'
+        address = receive_sql_query_result(sql_statement)
+    except Exception:
+        return render_template('tickets_list.html',
+                               attributes=result,
+                               error='Неверный ID организатора')
 
     try:
         sql_statement = sql_bld.build_insert_of_single_entry(
@@ -92,7 +98,9 @@ def ticket_add():
         db.execute(sql_statement)
     except DataError as e:
         return f'Неверный тип данных'
-    return redirect(url_for('tickets_handler.ticket_view_specific'))
+    return render_template('tickets_list.html',
+                           attributes=result,
+                           success_message='Билет успешно добавлен')
 
 
 def at_least_one_ticket_is_already_sold(tickets_id):
@@ -144,7 +152,7 @@ def ticket_sell():
     else:
         tickets_id = tuple(tickets_ids)
 
-    # checking request data validity. todo: replace return 'str' with abort(400)
+    # checking request data validity.
     if at_least_one_ticket_is_already_sold(tickets_id):
         return 'Один (или более) билетов уже проданы'
 
@@ -153,6 +161,10 @@ def ticket_sell():
 
     if coupon_data is not None and not CouponsHandler.is_valid(coupon_data):
         return 'Купон имеет неверный формат'
+
+    username = json.get(j_const.username)
+    if username == '':
+        return 'Гостям запрещена продажа билетов'
 
     # insert the possible coupon data into the database
     if coupon_data is not None:
@@ -175,7 +187,6 @@ def ticket_sell():
                     f'WHERE id {equal_operator} {tickets_id}'
     total_price = receive_sql_query_result(sql_statement)
 
-    username = json.get(j_const.username)
     sql_statement = f'SELECT id FROM users ' \
                     f'WHERE login LIKE \'{username}\''
     worker_id = receive_sql_query_result(sql_statement)

@@ -93,8 +93,7 @@ def build_insert_of_single_entry(
 
     for i in range(0, len(values)):
         value = values[i]
-
-        if type(value) is str:
+        if type(value) is str and value.upper() != 'NULL':
             sql_statement += f'\'{value}\', '
         else:
             sql_statement += f'{value}, '
@@ -106,8 +105,3 @@ def build_insert_of_single_entry(
         sql_statement += f' RETURNING {returning_column}'
 
     return sql_statement
-
-
-def __init__():
-    # maybe set table name here?
-    ...

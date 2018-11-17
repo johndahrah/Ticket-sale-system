@@ -1,4 +1,5 @@
 let selected_tickets = [];
+let editingTicketID;
 
 let errorBox = document.getElementById('error-box');
 
@@ -84,6 +85,30 @@ function alterTicket() {
         // xhr.setRequestHeader('Content-type', 'charset=utf-8');
         // xhr.send();
     }
+}
+
+function changeTicket(elem) {
+    if (event.key === 'Enter') {
+        let xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);
+
+        let json = JSON.stringify({});
+        json = JSON.parse(json);
+        json[String(elem.id)] = elem.value;
+        json = JSON.stringify(json);
+
+        xhr.open("POST", '/api/ticket/modify/' + editingTicketID, true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.send(json);
+    }
+}
+
+function makeFieldEditable(elem) {
+    const id = elem.parentNode.parentNode.parentNode.parentNode.id;
+    console.log(id);
+    editingTicketID = id;
+    elem.readOnly = false;
 }
 
 function showNewEntryForm() {

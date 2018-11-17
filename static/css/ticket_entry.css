@@ -1,9 +1,16 @@
 .ticket-opened-not-sold {
     border-collapse: collapse;
     border: 1px solid black;
-    background-color: rgba(59, 255, 59, 0.21);
+    background-color: darkseagreen;
     margin-bottom: 20px;
     width: 100%;
+}
+
+.ticket-opened-not-sold input {
+    background: darkseagreen;
+    border: 1px solid darkseagreen;
+    font-size: initial;
+    color: black;
 }
 
 .ticket-opened-sold {
@@ -11,11 +18,14 @@
     border: 1px solid black;
     margin-bottom: 20px;
     width: 100%;
-    /*background: lightcoral linear-gradient(*/
-            /*to left bottom, transparent calc(50% - 1px), black,*/
-            /*transparent calc(50% + 1px)*/
-    /*);*/
     background: lightcoral;
+}
+
+.ticket-opened-sold input {
+    background: lightcoral;
+    border: 1px solid lightcoral;
+    font-size: initial;
+    color: black;
 }
 
 .ticket-not-opened {
@@ -24,6 +34,13 @@
     background-color: lightgrey;
     margin-bottom: 20px;
     width: 100%;
+}
+
+.ticket-not-opened input {
+    background: lightgray;
+    border: 1px solid lightgray;
+    font-size: initial;
+    color: black;
 }
 
 .ticket-selected {
