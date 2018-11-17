@@ -132,6 +132,8 @@ def ticket_sell():
     date = str(now.date())
     json = dict(request.json)
     coupon_data = json.get(j_const.coupon)
+    if coupon_data == '':
+        coupon_data = None
 
     # separate the cases of (only one) and (many) tickets being sold:
     # in case of one ticket, we operate with it as an "int"
@@ -173,7 +175,10 @@ def ticket_sell():
                     f'WHERE id {equal_operator} {tickets_id}'
     total_price = receive_sql_query_result(sql_statement)
 
-    worker_id = json.get(j_const.userID)
+    username = json.get(j_const.username)
+    sql_statement = f'SELECT id FROM users ' \
+                    f'WHERE login LIKE \'{username}\''
+    worker_id = receive_sql_query_result(sql_statement)
 
     # receive coupon data
     sql_statement = f'SELECT id FROM coupons ' \

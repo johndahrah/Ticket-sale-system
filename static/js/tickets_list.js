@@ -28,11 +28,12 @@ function sellTickets() {
         selling = selected_tickets;
     }
 
-    // just for testing
+    let couponData = prompt("Введите (при наличии) контрольную строку купона");
+
     let json = JSON.stringify({
         "selling": selling,
-        "userid": 1,
-        "coupon": "7sample"
+        "user_name": sessionStorage.getItem('username'),
+        "coupon": couponData
     });
     xhr.open("POST", '/api/ticket/sell', true);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
