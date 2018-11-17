@@ -250,7 +250,7 @@ def ticket_modify(ticket_id):
     required json: ticket_id, data_to_change
     """
     if not ticket_id_exists(ticket_id):
-        return 'no ticket with such ID'
+        return 'Билета с таким ID не существует'
 
     sql_statement = f'UPDATE tickets SET '
 
@@ -268,17 +268,17 @@ def ticket_modify(ticket_id):
             more_than_one_argument = True
     sql_statement += f'WHERE id = {ticket_id}'
     db.execute(sql_statement)
-    return ''
+    return 'Успешно: билет изменен'
 
 
 @tickets_handler.route('/delete/<ticket_id>', methods=['GET'])
 def ticket_delete(ticket_id):
     if not ticket_id_exists(ticket_id):
-        return 'the ticket with given ID does not exist'
+        return 'Билета с таким ID не существует'
     sql_statement = f'DELETE FROM tickets ' \
                     f'WHERE id = {ticket_id}'
     db.execute(sql_statement)
-    return ''
+    return 'Успешно: билет удален'
 
 
 def ticket_id_exists(ticket_id):

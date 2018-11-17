@@ -72,21 +72,6 @@ function deleteTickets() {
     }
 }
 
-function alterTicket() {
-    if (selected_tickets.length !== 1) {
-        showError('Выделите только один билет, чтобы его изменить');
-    } else {
-        errorBox.classList.toggle('error-message-hidden');
-        // let xhr = new XMLHttpRequest();
-        //
-        // xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);
-        //
-        // xhr.open("GET", '/api/ticket/modify/' + selected_tickets[0], true);
-        // xhr.setRequestHeader('Content-type', 'charset=utf-8');
-        // xhr.send();
-    }
-}
-
 function changeTicket(elem) {
     if (event.key === 'Enter') {
         let xhr = new XMLHttpRequest();
@@ -139,7 +124,13 @@ function showPossibleErrorAndReloadIfSucces(xhr) {
             let response = xhr.responseText;
             console.log(response);
             if (response.length !== 0) {
-                showError(response)
+                if (response.substr(0, 7) === 'Успешно') {
+                    showSuccessMessage(response)
+                } else if (response.length < 50) {
+                    showError(response);
+                } else {
+                    showError('Ошибка сервера')
+                }
             } else {
                 // errorBox.classList.toggle('error-message-hidden');
                 window.location.reload(false)
