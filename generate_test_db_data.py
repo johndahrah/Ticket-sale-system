@@ -1,9 +1,11 @@
+import hashlib
+
 users_data = [
     # username, password, access_level
-    ('user1', '12345', 1),
-    ('user2', 'pass123', 1),
-    ('manager1', 'secret_pass', 2)
-]
+    ('user1', hashlib.md5(b'12345').hexdigest(), 1),
+    ('user2', hashlib.md5(b'pass123').hexdigest(), 1),
+    ('admin', hashlib.md5(b'admin').hexdigest(), 2)
+    ]
 
 tickets_data = [
     {1: True,         # OpenedForSelling

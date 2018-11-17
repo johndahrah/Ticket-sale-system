@@ -1,4 +1,5 @@
 from flask import request, Blueprint, render_template, redirect, url_for
+import hashlib
 
 import databaseProvider
 import json_text_constants as j_const
@@ -66,9 +67,10 @@ def login():
 
     username = request.args.get('username')
     password = request.args.get('password')
+    password_hash = hashlib.md5(password.encode()).hexdigest()
     sql_statement = f'SELECT * FROM users ' \
                     f'WHERE login LIKE \'{username}\' ' \
-                    f'AND password LIKE \'{password}\''
+                    f'AND password LIKE \'{password_hash}\''
     if receive_sql_query_result(sql_statement) is not None:
         return redirect(url_for('tickets_handler.ticket_view_specific'))
     else:

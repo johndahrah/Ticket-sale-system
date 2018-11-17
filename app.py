@@ -78,7 +78,8 @@ def rebuild_tables():
     generate_test_db_data.generate(db, clear_existing=true)
 
 
+rebuild_tables()
+
 if __name__ == '__main__':
-    rebuild_tables()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
