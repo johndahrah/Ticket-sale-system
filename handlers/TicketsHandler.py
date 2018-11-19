@@ -60,44 +60,46 @@ def ticket_add():
     """
     required json: see column_names below
     """
-    i = request.args
+    a = request.args
     sql_statement = f'SELECT * FROM tickets'
     result_sys = db.execute(sql_statement)
     result = [dict(row) for row in result_sys]
     try:
         sql_statement = f'SELECT name FROM organizers ' \
-                        f'WHERE id = {int(i.get(j_const.organizerid))}'
+                        f'WHERE id = {int(a.get(j_const.organizerid))}'
         org_name = receive_sql_query_result(sql_statement)
 
         sql_statement = f'SELECT address FROM organizers ' \
-                        f'WHERE id = {int(i.get(j_const.organizerid))}'
+                        f'WHERE id = {int(a.get(j_const.organizerid))}'
         address = receive_sql_query_result(sql_statement)
     except Exception:
         return render_template('tickets_list.html',
                                attributes=result,
                                error='Неверный ID организатора')
 
-    try:
-        sql_statement = sql_bld.build_insert_of_single_entry(
-            table='tickets',
-            column_names=('openedForSelling', 'eventDate', 'eventTime',
-                          'eventPlace', 'eventOrganizerName', 'sellPrice',
-                          'comment', 'organizerID', 'serialNumber', 'isSold',
-                          'eventName'),
-            values=(False, str(i.get(j_const.date)),
-                    str(i.get(j_const.time)), str(address),
-                    str(org_name), i.get(j_const.price),
-                    "",
-                    str(i.get(j_const.organizerid)),
-                    str(i.get(j_const.serial)), False,
-                    str(i.get(j_const.event_name)))
-            )
-    except KeyError as e:
-        return f'Был получен невеный кллюч!'
-    try:
-        db.execute(sql_statement)
-    except DataError as e:
-        return f'Неверный тип данных'
+    amount = int(a.get('amount'))
+    for i in range(1, amount):
+        try:
+            sql_statement = sql_bld.build_insert_of_single_entry(
+                table='tickets',
+                column_names=('openedForSelling', 'eventDate', 'eventTime',
+                              'eventPlace', 'eventOrganizerName', 'sellPrice',
+                              'comment', 'organizerID', 'serialNumber', 'isSold',
+                              'eventName'),
+                values=(False, str(a.get(j_const.date)),
+                        str(a.get(j_const.time)), str(address),
+                        str(org_name), a.get(j_const.price),
+                        "",
+                        str(a.get(j_const.organizerid)),
+                        str(a.get(j_const.serial)) + str(i), False,
+                        str(a.get(j_const.event_name)))
+                )
+        except KeyError as e:
+            return f'Был получен невеный кллюч!'
+        try:
+            db.execute(sql_statement)
+        except DataError as e:
+            return f'Неверный тип данных'
     return render_template('tickets_list.html',
                            attributes=result,
                            success_message='Билет успешно добавлен')
