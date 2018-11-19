@@ -1,9 +1,26 @@
-.entry {
-    border: 2px solid black;
+.entries-list {
+    width: 100%;
+    text-align: center;
     margin-bottom: 30px;
+    border: 1px solid black;
+    background: lightgray;
 }
 
-table.entries-list {
+.action-form {
+    display: flex;
+    justify-content: space-between;
+    background-color: darkgrey;
+}
+
+.action-button {
+    display: inline-block;
+    margin: 5px 0;
+    background-color: #777;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    font-size: 16px;
     width: 100%;
-    text-align: left;
+    border: 1px solid darkgrey;
+    font-family: sans-serif;
 }

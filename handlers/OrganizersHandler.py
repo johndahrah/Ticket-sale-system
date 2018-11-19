@@ -90,8 +90,8 @@ def organizer_delete(organizer_id):
     except exc.IntegrityError as e:
         # prevent violating foreign key constraint on table tickets,
         # in most common case.
-        return 'you can not delete this organizer: <br>' + str(e)
-    return 'ok'
+        return 'Нельзя удалить организатора, у которого имеются билеты'
+    return 'Успешно: организатор удален'
 
 
 def organizer_exists(organizer_id):

@@ -5,24 +5,40 @@
       href="{{ url_for('static', filename='css/organizers_list.css') }}"/>
 {% endblock %}
 
+{% block script %}
+    <script src="{{ url_for('static', filename='js/organizers_list.js')}}"></script>
+{% endblock %}
+
 {% block title %}
-Список организаторов
+    Список организаторов
 {% endblock %}
 
 {% block content_caption %}
     Список организаторов
 {% endblock %}
 
-{% block content %}
+{% block above_content_sticky %}
+    <form class="action-form">
+        <button type="button" class="action-button" onclick="deleteOrganizer()">Удалить</button>
+        <button type="button" class="action-button" onclick="showNewOrganizerForm()">Добавить</button>
+    </form>
+{% endblock %}
 
-    <table class="entries-list">
-        {% for i in attributes %}
-            <tr> <th class="entry">
-                <b>{{ i.id }}</b> <br>
-                <hr>
-                Организатор: <b>{{ i.name }}</b>,
-                Адрес: <b>{{ i.address }}</b> <br>
-            </th> </tr>
-        {% endfor %}
-    </table>
+{% block content %}
+    {% for i in attributes %}
+        {% include 'organizer_entry.html' %}
+    {% endfor %}
+{% endblock %}
+
+{% block error_message %}
+    {% if error is defined and error != '' %}
+        <div id="error-box" class="error-message">
+    {% elif success_message is defined and success_message != '' %}
+        <div id="error-box" class="error-message-success">
+    {% else %}
+        <div id="error-box" class="error-message-hidden">
+    {% endif %}
+        {{ error }}
+        {{ success_message }}
+    </div>
 {% endblock %}
