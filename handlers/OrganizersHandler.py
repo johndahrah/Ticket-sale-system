@@ -38,19 +38,22 @@ def organizer_view_specific():
         return 'no one correct json key found'
 
 
-@organizers_handler.route('/add', methods=['POST'])
+@organizers_handler.route('/add', methods=['GET'])
 def organizer_add():
-    content = dict(request.get_json())
-    organizer_id, name, address = get_organizer_data(content)
+    content = request.args
+    organizer_id = content.get(j_const.organizer_id)
+    name = content.get(j_const.organizer_name)
+    address = content.get(j_const.organizer_address)
+    # organizer_id, name, address = get_organizer_data(content)
     if not organizer_exists(organizer_id):
         sql_statement = sql_bld.build_insert_of_single_entry(
             table='organizers',
             values=(organizer_id, str(name), str(address))
             )
         db.execute(sql_statement)
-        return 'ok'
+        return 'Успешно: организатор добавлен в базу'
     else:
-        return 'organizer with such id already exists!'
+        return 'Организатор с таким ID уже существует!'
 
 
 @organizers_handler.route('/modify/<organizer_id>', methods=['POST'])
@@ -106,5 +109,3 @@ def get_organizer_data(content):
     address = content.get(j_const.organizer_address)
     organizer_id = content.get(j_const.organizer_id)
     return organizer_id, name, address
-
-

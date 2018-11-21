@@ -24,7 +24,9 @@
     </form>
 {% endblock %}
 
-{% block content %}
+{% block content %}å
+    {% include 'organizer_new_entry.html' %}
+
     {% for i in attributes %}
         {% include 'organizer_entry.html' %}
     {% endfor %}

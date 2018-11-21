@@ -1,0 +1,20 @@
+<form id="new-organizer-form" class="form-hidden" action="{{ url_for('organizers_handler.organizer_add') }}">
+<table class="new-organizer-form">
+    <tr>
+        <td>
+            <input placeholder="ID организатора" type="number" name="id" class="input-new"/>
+            <button type="submit">Добавить</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input placeholder="Наименование" type="text" name="name" class="input-new"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input placeholder="Адрес" type="text" name="address" class="input-new"/>
+        </td>
+    </tr>
+</table>
+</form>

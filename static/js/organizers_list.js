@@ -1,5 +1,6 @@
 let selected;
 let errorBox = document.getElementById('error-box');
+let newOrganizerForm = document.getElementById('new-organizer-form');
 
 function deleteOrganizer() {
     if (confirm("Вы действительно хотите удалить организатора?")) {
@@ -14,7 +15,9 @@ function deleteOrganizer() {
 }
 
 function showNewOrganizerForm() {
-    //todo
+    newOrganizerForm.className = newOrganizerForm.className === 'form-visible'?
+        'form-hidden' : 'form-visible';
+    newOrganizerForm.scrollIntoView(false);
 }
 
 function selectOrganizer(table) {
