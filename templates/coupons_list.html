@@ -21,6 +21,7 @@
 {% block content %}
     {% for i in attributes %}
         Контрольная строка: <b>"{{ i.coupondata }}"</b>,
-        дата использования: <b>{{ i.dateused }}</b> <hr>
+        дата использования: <b>{{ i.dateused }}</b>
+        <hr color="black">
     {% endfor %}
 {% endblock %}

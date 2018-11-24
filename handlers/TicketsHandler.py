@@ -78,7 +78,7 @@ def ticket_add():
                                error='Неверный ID организатора')
 
     amount = int(a.get('amount'))
-    for i in range(1, amount):
+    for i in range(1, amount+1):
         try:
             sql_statement = sql_bld.build_insert_of_single_entry(
                 table='tickets',

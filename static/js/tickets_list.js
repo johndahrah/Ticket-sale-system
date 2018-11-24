@@ -18,6 +18,11 @@ function validate_search_data(form) {
 }
 
 function sellTickets() {
+    if (selected_tickets.length === 0) {
+        showError('Выберите билеты для продажи');
+        return;
+    }
+
     let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);
