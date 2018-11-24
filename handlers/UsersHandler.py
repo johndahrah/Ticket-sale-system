@@ -1,9 +1,8 @@
 from flask import request, Blueprint, render_template, redirect, url_for
 import hashlib
 
-import databaseProvider
 import json_text_constants as j_const
-import sql_abstract_builder as sql_bld
+from database import sql_abstract_builder as sql_bld, databaseProvider
 
 users_handler = Blueprint(
     'users_handler', __name__, url_prefix='/api/user'

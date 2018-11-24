@@ -1,12 +1,11 @@
 import re
 
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, render_template
 from sqlalchemy import *
 import os
 
-import databaseProvider
-import generate_test_db_data
-from StatisticsGenerator import statistics_generator
+from database import generate_test_db_data, databaseProvider
+from handlers.StatisticsGenerator import statistics_generator
 from handlers.CouponsHandler import coupons_handler
 from handlers.OrganizersHandler import organizers_handler
 from handlers.TicketsHandler import tickets_handler
@@ -30,14 +29,14 @@ def init():
 
 @app.route('/api/system/db/init_tables')
 def initialize_all_tables():
-    content = read_file('sql/create_tables.sql')
+    content = read_file('database/sql/create_tables.sql')
     return execute_sql_commands(content)
 
 
 @app.route('/api/system/db/drop_tables')
 def drop_all_tables():
     # todo: a good permission check is vital for this action
-    content = read_file('sql/drop_all_tables.sql')
+    content = read_file('database/sql/drop_all_tables.sql')
     return execute_sql_commands(content)
 
 

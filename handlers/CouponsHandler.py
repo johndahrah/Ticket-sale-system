@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, abort
 from sqlalchemy import exc
 
-import databaseProvider
+from database import databaseProvider
 
 coupons_handler = Blueprint (
     'coupons_handler', __name__, url_prefix='/api/coupon'

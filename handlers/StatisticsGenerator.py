@@ -1,7 +1,7 @@
 from flask import Blueprint
 from sqlalchemy import exc
 
-import databaseProvider
+from database import databaseProvider
 
 statistics_generator = Blueprint(
     'statistics_generator', __name__, url_prefix='/api/stat'

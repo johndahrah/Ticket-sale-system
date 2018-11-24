@@ -1,12 +1,11 @@
 import datetime
 
-from flask import request, Blueprint, render_template, redirect, url_for
+from flask import request, Blueprint, render_template
 from sqlalchemy.engine import ResultProxy
 from sqlalchemy.exc import DataError
 
-import databaseProvider
 import json_text_constants as j_const
-import sql_abstract_builder as sql_bld
+from database import sql_abstract_builder as sql_bld, databaseProvider
 from handlers import CouponsHandler
 
 tickets_handler = Blueprint(
