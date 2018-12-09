@@ -13,12 +13,12 @@
     <tr>
         <th colspan=3>
             {{ entry.eventorganizername }}, {{ entry.eventplace }} <br>
-            {{ entry.eventname }}
+            <input id="eventname" type="text" placeholder="{{ entry.eventname }}" readonly="readonly" onkeydown="changeTicket(this)" onclick="makeFieldEditable(this)">
         </th>
     </tr>
     <tr>
-        <td>Дата: {{ entry.eventdate }}<br>
-            Время: {{ entry.eventtime }}</td>
+        <td>Дата: <input id="eventdate" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="{{ entry.eventdate }}" readonly="readonly" onkeydown="changeTicket(this)" onclick="makeFieldEditable(this)"><br>
+            Время: <input id="eventtime" type="text" onfocus="(this.type='time')" onblur="(this.type='text')" placeholder="{{ entry.eventtime }}" readonly="readonly" onkeydown="changeTicket(this)" onclick="makeFieldEditable(this)"></td>
         <td>Цена: <input id="sellprice" type="text" placeholder="{{ entry.sellprice }}" readonly="readonly" onkeydown="changeTicket(this)" onclick="makeFieldEditable(this)"></td>
         <td>
             {{ entry.serialnumber }}

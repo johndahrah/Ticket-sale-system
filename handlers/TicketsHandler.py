@@ -265,9 +265,12 @@ def ticket_modify(ticket_id):
         if argument is not None:
             if more_than_one_argument:
                 sql_statement += ' , '
-            sql_statement += f'{i} = {argument}'
+            if type(argument) is str and argument.upper() != 'NULL':
+                sql_statement += f'{i} = \'{argument}\''
+            else:
+                sql_statement += f'{i} = {argument}'
             more_than_one_argument = True
-    sql_statement += f'WHERE id = {ticket_id}'
+    sql_statement += f' WHERE id = {ticket_id}'
     db.execute(sql_statement)
     return 'Успешно: билет изменен'
 
