@@ -131,7 +131,7 @@ function showPossibleErrorAndReloadIfSucces(xhr) {
             if (response.length !== 0) {
                 if (response.substr(0, 7) === 'Успешно') {
                     showSuccessMessage(response)
-                } else if (response.length < 50) {
+                } else if (response.length < 70) {
                     showError(response);
                 } else {
                     showError('Ошибка сервера')

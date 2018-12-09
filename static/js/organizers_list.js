@@ -1,4 +1,5 @@
 let selected;
+let editingOrganizerID;
 let errorBox = document.getElementById('error-box');
 let newOrganizerForm = document.getElementById('new-organizer-form');
 
@@ -11,6 +12,30 @@ function deleteOrganizer() {
         xhr.open("GET", '/api/organizer/delete/' + selected, true);
         xhr.setRequestHeader('Content-type', 'charset=utf-8');
         xhr.send();
+    }
+}
+
+function makeOrgFieldEditable(elem) {
+    const id = elem.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+    console.log(id);
+    editingOrganizerID = id;
+    elem.readOnly = false;
+}
+
+function changeOrganizer(elem) {
+    if (event.key === 'Enter') {
+        let xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);
+
+        let json = JSON.stringify({});
+        json = JSON.parse(json);
+        json[String(elem.id)] = elem.value;
+        json = JSON.stringify(json);
+
+        xhr.open("POST", '/api/organizer/modify/' + editingOrganizerID, true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.send(json);
     }
 }
 

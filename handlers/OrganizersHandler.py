@@ -74,11 +74,16 @@ def organizer_modify(organizer_id):
         if argument is not None:
             if more_than_one_argument:
                 sql_statement += ' , '
-            sql_statement += f'{i} = {argument}'
+            sql_statement += f'{i} = \'{argument}\''
+            val = 'eventorganizername' if i == 'name' else 'eventplace'
+            ss_2 = f'UPDATE tickets ' \
+                   f'set {val} = \'{argument}\' ' \
+                   f'WHERE organizerid = {organizer_id}'
+            db.execute(ss_2)
             more_than_one_argument = True
-    sql_statement += f'WHERE id = {organizer_id}'
+    sql_statement += f' WHERE id = {organizer_id}'
     db.execute(sql_statement)
-    return 'ok'
+    return 'Успешно: организатор изменен'
 
 
 @organizers_handler.route('/delete/<organizer_id>')

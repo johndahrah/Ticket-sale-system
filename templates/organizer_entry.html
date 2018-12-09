@@ -3,8 +3,10 @@
         <td>
             ID: <b>{{ i.id }}</b> <br>
             <hr color="black">
-            Наименование: <b>{{ i.name }}</b> <br>
-            Адрес: <b>{{ i.address }}</b>
+            Наименование: <b>
+            <input id="name" type="text" placeholder="{{ i.name }}" readonly="readonly" onkeydown="changeOrganizer(this)" onclick="makeOrgFieldEditable(this)">
+            </b> <br>
+            Адрес: <b><input id="address" type="text" placeholder="{{ i.address }}" readonly="readonly" onkeydown="changeOrganizer(this)" onclick="makeOrgFieldEditable(this)"></b>
         </td>
     </tr>
 </table>

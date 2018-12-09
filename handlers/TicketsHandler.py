@@ -2,7 +2,7 @@ import datetime
 
 from flask import request, Blueprint, render_template
 from sqlalchemy.engine import ResultProxy
-from sqlalchemy.exc import DataError
+from sqlalchemy.exc import DataError, IntegrityError
 
 import json_text_constants as j_const
 from database import sql_abstract_builder as sql_bld, databaseProvider
@@ -281,7 +281,11 @@ def ticket_delete(ticket_id):
         return 'Билета с таким ID не существует'
     sql_statement = f'DELETE FROM tickets ' \
                     f'WHERE id = {ticket_id}'
-    db.execute(sql_statement)
+    try:
+        db.execute(sql_statement)
+    except IntegrityError:
+        return 'Билет не может быть удален: в базе есть ссылающийся на него чек'
+
     return 'Успешно: билет удален'
 
 
