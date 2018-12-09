@@ -31,8 +31,14 @@ def coupons_add():
     """)
 
 
-# don't @route anything here
-# to avoid finding valid coupon via brute force
+@coupons_handler.route('/check/<data>')
+def coupon_check_validity(data: str):
+    if is_valid(data):
+        return 'Купон может быть применен'
+    else:
+        return 'Купон имеет неверный формат'
+
+
 def is_valid(data: str):
     # something simple for now.
     # e.g.      7SAMPLE (valid)

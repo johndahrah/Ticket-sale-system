@@ -11,21 +11,22 @@ db = databaseProvider.connect_to_db()
 
 @statistics_generator.route('/tickets')
 def generate_tickets_statistics():
-    sql_statement = f'SELECT * FROM tickets'
+    result = {}
 
-    try:
-        result_sys = db.execute(sql_statement)
-    except exc.IntegrityError:
-        return 'table tickets dies not exist!'
+    sql_statement = f'SELECT count(*) FROM tickets'
+    value = receive_sql_query_result(sql_statement)
+    result['total_tickets_amount'] = value
 
-    result = [dict(row) for row in result_sys]
+    sql_statement = f'SELECT sum(sellprice) FROM tickets'
+    value = receive_sql_query_result(sql_statement)
+    result['total_sum'] = value
 
-    total_price_of_sold = 0
-    for i in result:
-        if i.get('issold'):
-            total_price_of_sold += i.get('sellprice')
+    sql_statement = f'SELECT sum(sellprice) FROM tickets ' \
+                    f'where issold = TRUE'
+    value = receive_sql_query_result(sql_statement)
+    result['total_sold_sum'] = value
 
-    return str(total_price_of_sold)
+    return '<br/>'.join([f'{key}: {value}'for (key, value) in result.items()])
 
 
 @statistics_generator.route('/coupons')
@@ -50,5 +51,33 @@ def generate_coupons_statistics():
         else:
             coupons_date_usage_distribution[date] = 1
 
-    stat = [coupons_data_usage_distribution, coupons_date_usage_distribution]
+    stat = [
+        '<br/>'.join([f'{key}: {value}' for (key, value) in
+                      coupons_data_usage_distribution.items()]),
+        '<br/>'.join([f'{key}: {value}' for (key, value) in
+                      coupons_date_usage_distribution.items()])]
     return str(stat)
+
+
+@statistics_generator.route('/all')
+def show_all_statistics():
+    return f'{generate_tickets_statistics()} <br> ' \
+           f'{generate_coupons_statistics()}'
+
+
+def receive_sql_query_result(sql_statement):
+    """
+    works only for receiving a single variable.
+    """
+    sql_sum_result = db.execute(sql_statement)
+    result = []
+    if sql_sum_result.rowcount != 1:
+        print('--- CHECK receive_sql_query_result ---')
+    for row in sql_sum_result:
+        result.append(row)
+
+    try:
+        data = result[0]._row[0]
+    except IndexError:
+        return None
+    return data
