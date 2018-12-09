@@ -79,6 +79,17 @@ function deleteTickets() {
 
 function openTicketsForSale() {
     for (let i = 0; i < selected_tickets.length; i++) {
+
+        let current = document.getElementById(selected_tickets[i]);
+        if (current.classList[0] === "ticket-opened-sold") {
+            showError("Билет уже продан");
+            return false
+        }
+        if (current.classList[0] === "ticket-opened-not-sold") {
+            showError("Билет уже открыт для продажи");
+            return false
+        }
+
         let xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);

@@ -97,8 +97,12 @@ def ticket_add():
             return f'Был получен невеный кллюч!'
         try:
             db.execute(sql_statement)
-        except DataError as e:
+        except DataError:
             return f'Неверный тип данных'
+        except IntegrityError as e:
+            return f'Организатора с ID ' \
+                   f'{int(a.get(j_const.organizerid))} не существует!'
+
     return render_template('tickets_list.html',
                            attributes=result,
                            success_message='Билет успешно добавлен')
