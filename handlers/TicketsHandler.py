@@ -201,13 +201,16 @@ def ticket_sell():
                     f'WHERE coupondata LIKE \'{coupon_data}\''
     coupon_id = receive_sql_query_result(sql_statement)
 
+    discount = CouponsHandler.get_discount_amount(coupon_data)
+
     # insert all data in "checks" table and receive the id of a new record
     sql_statement = sql_bld.build_insert_of_single_entry(
         table='checks',
         column_names=('TicketsAmount', 'TotalPrice',
                       'CouponUsed', 'CouponID', 'WorkerID'),
         values=(1 if type(tickets_ids) is str else len(tickets_id),
-                total_price, coupon_data is not None,
+                total_price - discount*100,
+                coupon_data is not None,
                 "null" if coupon_id is None else coupon_id,
                 worker_id),
         returning_column='id'

@@ -43,8 +43,17 @@ def is_valid(data: str):
     # something simple for now.
     # e.g.      7SAMPLE (valid)
 
+    if data is None:
+        return False
     if not data[0].isdigit():
         return False
     if len(data) != int(data[0]):
         return False
     return True
+
+
+def get_discount_amount(data: str=None):
+    if is_valid(data):
+        return int(data[0])
+    else:
+        return 0
