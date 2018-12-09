@@ -77,6 +77,23 @@ function deleteTickets() {
     }
 }
 
+function openTicketsForSale() {
+    for (let i = 0; i < selected_tickets.length; i++) {
+        let xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = showPossibleErrorAndReloadIfSucces(xhr);
+
+        let json = JSON.stringify({});
+        json = JSON.parse(json);
+        json[String('openedforselling')] = true;
+        json = JSON.stringify(json);
+
+        xhr.open("POST", '/api/ticket/modify/' + selected_tickets[i], true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.send(json);
+    }
+}
+
 function changeTicket(elem) {
     if (event.key === 'Enter') {
         let xhr = new XMLHttpRequest();
@@ -147,9 +164,4 @@ function showPossibleErrorAndReloadIfSucces(xhr) {
 function showSuccessMessage(s) {
     errorBox.className = 'error-message-success';
     errorBox.innerText = s;
-}
-
-function sleepFor(sleepDuration ){
-    var now = new Date().getTime();
-    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
 }
