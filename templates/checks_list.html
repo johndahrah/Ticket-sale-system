@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}
+
+
+{% block content_caption %}
+{% endblock %}
+
+
+{% block above_content %}
+{% endblock %}
+
+
+{% block content %}
+    {% for entry in data %}
+        {{ entry }}
+    {% endfor %}
+{% endblock %}

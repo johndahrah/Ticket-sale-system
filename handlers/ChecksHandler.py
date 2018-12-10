@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from database import databaseProvider
 
 checks_handler = Blueprint (
@@ -13,9 +13,10 @@ def checks_view_all():
         'SELECT * FROM checks ORDER BY id'
         )
     result = [dict(row) for row in result_sys]
-    out = ''
+    out_str = ''
+    out = []
     for i in result:
-        out += '<br/>'.join([f'{key}: {value}'
+        out_str += '\n'.join([f'{key}: {value}'
                              for (key, value) in i.items()])
-        out += '<br/> <br/>'
-    return out
+        out.append(out_str)
+    return render_template('checks_list.html', data=out)
